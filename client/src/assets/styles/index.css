@@ -1,0 +1,12 @@
+/* @import url('./vars/fonts.css'); */
+@import url('./vars/spaces.css');
+@import url('./vars/colors.css');
+@import url('./reset.css');
+@import url('./main.css');
+@import url('./parts/form.css');
+@import url('./parts/articles.css');
+@import url('./parts/header.css');
+@import url('./parts/navigation.css');
+@import url('./parts/main.css');
+@import url('./parts/loading.css');
+@import url('./parts/footer.css');

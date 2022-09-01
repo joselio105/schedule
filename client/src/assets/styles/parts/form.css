@@ -1,0 +1,111 @@
+#container .content-page form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+#container .content-page form .input-block,
+#container .content-page .commands .select-block{
+    position: relative;
+    width: 100%;
+    min-height: 4rem;
+    border: 1px solid var(--color-primary);
+    background: var(--color-primary-light);
+    padding: 1rem;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#container .content-page form .input-block label,
+#container .content-page .commands .select-block label{
+    position: absolute;
+    top: -1rem;
+    left: 2rem;
+    background: var(--color-primary-light);
+    padding: 0 .5rem;
+    color: var(--color-text-on-primay);
+    text-transform: uppercase;
+    font-size: .75rem;
+    padding: .5rem;
+}
+
+#container .content-page form .input-block input,
+#container .content-page form .input-block select,
+#container .content-page .commands .select-block select{
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: .5rem;
+    outline-color: var(--color-primary-dark);
+    font-size: 1.2rem;
+}
+
+#container .content-page .commands .select-block{
+    max-width: 30%;
+}
+
+#container .content-page form .form-buttons-wrapper{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#container .content-page form .form-buttons-wrapper button{
+    width: 45%;
+    border: none;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .5rem;    
+    font-size: 1rem;
+    text-transform: uppercase;
+    transition: transform .3s;
+}
+
+#container .content-page form .form-buttons-wrapper .submit{
+    background-color: var(--color-seconday);
+    color: var(--color-text-on-dark);
+}
+
+#container .content-page form button:hover{
+    transform: scale(.9);
+}
+
+#container .content-page form .buttons{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#container .content-page form .textarea-block{
+    position: relative;
+    width: 100%;
+    min-height: 4rem;
+    border: 1px solid var(--color-primary);
+    background: var(--color-primary-light);
+    padding: 1rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+}
+
+#container .content-page form .textarea-block textarea{
+    width: 100%;
+    height: 15rem;
+}
+
+#container .content-page form .textarea-block .edit-output{
+    width: 100%;
+    height: 15rem;
+    border: 1px solid var(--color-primary-dark);
+    border-radius: 15px;
+}

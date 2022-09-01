@@ -1,0 +1,53 @@
+#container > header{
+    z-index: 10;
+    width: 100%;
+    background: rgba(200, 200, 200, .5) left center;
+    margin-bottom: 2.5rem;
+}
+
+#container header .inner{       
+    width: 95%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}  
+
+#container header .inner .logo{
+    margin: 1rem;
+    height: 9rem;
+    grid-area: logo;
+}
+
+#container header .inner .commands{
+    grid-area: 'commands';
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#container header .inner h1{
+	color: var(--color-text-on-primay);
+	font-weight: bold;
+	font-family: economica;
+	text-align: center;
+	font-size: 2rem;
+    grid-area: title;
+}
+
+#container header .inner h1 span{
+    display: none;
+}
+
+@media screen and (min-width: 700px){
+
+    #container header .inner{
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    #container header .inner .logo{
+        margin-left: 0;
+    }
+}

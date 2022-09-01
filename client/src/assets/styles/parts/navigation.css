@@ -1,0 +1,133 @@
+#container header .inner .main-nav.close{
+    transform: translateX(-1000px);
+}
+
+#container header .inner .main-nav{
+    position: absolute;
+    top: 1rem;
+    padding: 1rem;
+    background-color: var(--color-primary);
+}
+
+#container header .inner .main-nav ul{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-on-primay);
+}
+
+#container header .inner .main-nav ul li{
+    width: 100%;
+    transition: border .3s;
+    border: 2px solid transparent;
+}
+
+#container header .inner .main-nav ul li:hover{
+    border-bottom: 2px solid var(--color-text-on-primay);
+}
+
+#container header .inner .commands .button-open-nav{
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    color: var(--color-text-on-primay-light);
+    cursor: pointer;
+    transition: color .3s;
+}
+
+#container header .inner .commands .auth-nav{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: stretch;
+    transition: .5s;
+}
+
+#container header .inner .commands .button-open-nav:hover,
+#container header .inner .commands .auth-nav .login:hover{
+    color: var(--color-primary-darker);
+    /* transform: scale(1.5); */
+}
+
+#container header .inner .commands .auth-nav .login{
+    margin-right: 1rem;
+    font-weight: 700;
+    height: 100%;
+    color: var(--color-text-on-primay-light);
+    transition: color .5s;
+}
+
+#container header .inner .commands .auth-nav .auth-title{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-primary-dark);
+    border: 1px solid var(--color-primary-darker);
+    font-size: 1.5rem;
+    color: var(--color-title-on-primay);
+    text-transform: uppercase;
+}
+
+#container header .inner .commands .auth-nav .auth-list{
+    display: none;
+    background-color: inherit;
+}
+
+#container header .inner .commands .auth-nav:hover .auth-list{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    top: 3rem;
+    gap: 1rem;
+    background-color: var(--color-primary-dark);
+    font-size: 1rem;
+    color: var(--color-title-on-primay);
+}
+
+#container header .inner .commands .auth-nav:hover .auth-list a{
+    padding: 1rem;
+    font-weight: 500;
+    transition: color .5s;
+}
+
+#container header .inner .commands .auth-nav:hover .auth-list a:hover{
+    color: var(--color-primary-light);
+    cursor: pointer;
+}
+
+@media screen and (min-width: 700px){
+    
+    #container header .inner .main-nav.close{
+        transform: translateX(0);
+        position: relative;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        padding: 0;
+        margin-left: 8rem;
+    }
+
+    #container header .inner .commands .button-open-nav{
+        display: none;
+    }
+
+    #container header .inner .main-nav ul{
+        height: 100%;
+        flex-direction: row;
+        align-items: center;
+        margin-top: -1.5rem;
+    }
+
+    #container header .inner .main-nav ul li{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

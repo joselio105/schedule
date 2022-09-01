@@ -1,0 +1,147 @@
+#container-search main{
+    display: grid;
+    grid-template-areas: 
+        "title"
+        "column-left"
+        "column-right"
+        "button";
+}
+
+#container-search main h2{
+    background: var(--color-primary-light);
+    color: var(--color-title-on-primary);
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-align: center;
+    padding: .8rem;
+    grid-area: title;
+}
+
+#container-search main section{
+    grid-area: column-left;
+}
+
+#container-search main aside{
+    grid-area: column-right;
+}
+
+#container-search main .big-box .title{
+    display: block;
+    background: var(--color-primary-darker);
+    color: var(--color-text-on-dark);
+    font-weight: 400;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+#container-search main .big-box .inner{
+    padding: 1rem;
+}
+
+#container-search main .big-box .box p{
+    background: transparent;
+    color: var(--color-text-on-background);
+    font-size: 1.2rem;
+}
+
+
+#container-search main .big-box .box p strong{
+    background: transparent;
+    color: var(--color-text-on-primay-light);
+    font-weight: 400;
+}
+
+#container-search main .big-box .box .inner-row{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#container-search main .big-box .box .inner-row .file{
+    width: 100%;
+    height: 15rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: .5rem;
+    border: 1px solid var(--color-primary-darker);
+    margin: .5rem;
+}
+
+#container-search main .big-box .box .inner-row .file nav{
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#container-search main .big-box .box .inner-row .file nav a{
+    height: 100%;
+    border: none;
+    background: transparent;
+    padding: .5rem;
+    cursor: pointer;
+    transition: height .3s;
+}
+
+#container-search main .big-box .box .inner-row .file nav a:hover{
+    height: 105%;
+}
+
+#container-search main .big-box .box .inner-row .file span,
+#container-search main .big-box .box .inner-row .file time{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary-dark);
+    color: var(--color-text-on-dark);
+    font-size: .8rem;
+}
+
+#container-search main .big-box .box .inner-row .file strong{
+    width: 100%;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--color-text-on-primay-light);
+    font-size: 1rem;
+}
+
+#container-search main .back{
+    background: transparent;
+    width: 12rem;
+    height: 4rem;
+    border: none;
+    grid-area: button;
+    justify-self: right;
+}
+
+@media screen and (min-width: 625px){
+
+    #container-search main{
+        grid-template-areas:
+            'title title'
+            'form form'
+            'response response'
+            'column-left column-right'
+            'button button';
+        grid-template-columns: 50% 50%;
+    }
+
+    #container-search main .big-box .box .inner-row{
+        flex-direction: row;
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+
+    #container-search main .big-box .box .inner-row .file{
+        min-width: 10rem;
+        width: 20%;
+        margin-right: .5rem;
+    }
+}

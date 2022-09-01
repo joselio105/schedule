@@ -1,0 +1,11 @@
+@charset "utf-8";
+
+@font-face {
+    font-family: gidole;
+    src: url(../../fonts/Gidole-Regular.ttf);
+}
+@font-face {
+    font-family: economica;
+    src: url(../../fonts/economica-4.ttf);
+	font-weight:normal;
+}
