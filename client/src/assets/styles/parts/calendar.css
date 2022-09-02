@@ -1,0 +1,75 @@
+.calendar-week{
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    border-radius: 1rem;
+    border: 2px solid var(--color-background-darker);
+}
+
+.calendar-week .calendar-head{
+    height: 7rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--color-primary-darker);
+    color: var(--color-text-on-dark);
+    border-radius: 1rem 1rem 0 0;
+}
+
+.calendar-week .calendar-head .button{
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 5rem;
+    height: 3rem;
+    border-radius: .6rem;
+    background: transparent;
+    margin: .5rem 0;
+    transition: transform .5s;
+}
+
+.calendar-week .calendar-head .button:hover{
+    transform: scale(.8);
+}
+
+.calendar-week .calendar-head .calendar-title{
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.calendar-week .week-days{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.calendar-week .week-days .day{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-background-darker);
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 1rem;
+    border-right: 1px solid var(--color-primary);
+    border-bottom: 1px solid var(--color-primary);
+}
+
+.calendar-week .content-wrapper{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.calendar-week .content-wrapper .hour-label,
+.calendar-week .content-wrapper .hour-content{
+    color: var(--color-background-darker);
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-right: 1px solid var(--color-primary);
+    border-bottom: 1px solid var(--color-primary);
+}
+
+.calendar-week .content-wrapper .hour-label{
+    border-left: 1px solid var(--color-primary);
+}

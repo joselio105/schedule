@@ -17,6 +17,17 @@ const createHtml = (tag, params={}) => {
     return element;
 }
 
+export const createButton = ( buttonAttrs, iconAttrs=null ) => {
+    const button = createHtml('button', buttonAttrs);
+
+    if(iconAttrs !== null){
+        const icon = createHtml('img', iconAttrs);
+        button.appendChild(icon);
+    }
+
+    return button;
+}
+
 export const setSelectBlock = (container, attributes) => {
     const { id, labelText, value, options } = attributes;
 
