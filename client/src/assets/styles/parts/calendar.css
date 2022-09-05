@@ -60,16 +60,34 @@
     grid-template-columns: repeat(6, 1fr);
 }
 
-.calendar-week .content-wrapper .hour-label,
-.calendar-week .content-wrapper .hour-content{
-    color: var(--color-background-darker);
+.calendar-week .content-wrapper .label-content,
+.calendar-week .content-wrapper .day-content{
+    position: relative;
     display: flex;
-    align-items: center;
-    padding: 1rem;
-    border-right: 1px solid var(--color-primary);
-    border-bottom: 1px solid var(--color-primary);
+    flex-direction: column;
+    border-right: 1px solid var(--color-primary);    
 }
 
-.calendar-week .content-wrapper .hour-label{
+.calendar-week .content-wrapper .label-content{
     border-left: 1px solid var(--color-primary);
+}
+
+.calendar-week .content-wrapper .label-content .hours-label,
+.calendar-week .content-wrapper .day-content .hours-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--color-primary);
+    height: 6rem;
+}
+
+.calendar-week .content-wrapper .day-content .schedule-event{
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-primary-dark);
+    color: var(--color-text-on-dark);
+
 }
