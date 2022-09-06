@@ -7,7 +7,7 @@ export default () => {
     const container = document.querySelector('.content-page');
     setTitle(container);
     setCommands(container);
-    setSchedule(container);
+    setCalendar(container);
 }
 
 const setTitle = (container, type='Laboratório') => {
@@ -16,12 +16,12 @@ const setTitle = (container, type='Laboratório') => {
     container.appendChild(title);
 }
 
-const setSchedule = (container, type='week') => {
-    const scheduleTypes = {
+const setCalendar = (container, type='month') => {
+    const renderCalendar = {
         week: scheduleWeek,
         month: scheduleMonth
     }
 
-    scheduleTypes[type](container);
+    renderCalendar[type](container);
 }
 

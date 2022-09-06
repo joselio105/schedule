@@ -17,7 +17,7 @@ export default container => {
     setSelectBlock(commands, {
         id: "view",
         labelText: "Visualizar Calendário",
-        value: 0,
+        value: 1,
         options 
     });
     
