@@ -64,7 +64,8 @@ const getMonthDaysClean = timeStampToday => {
             day: data.day,
             weekDay: date.getDay(),
             timestamp: data.timeStamp, 
-            date: date.toDateString()
+            date: date.toDateString(),
+            currentMonth: true
         });
         data.timeStamp += oneDay;
 
@@ -91,7 +92,7 @@ export const getMonthDays = timeStampToday => {
             day: dateObjectLastMonth.getDate(),
             weekDay: dateObjectLastMonth.getDay(),
             timestamp: lastMonthTimeStamp, 
-            date: dateObject.toDateString()
+            date: dateObjectLastMonth.toDateString()
         });
     }
 
@@ -127,7 +128,14 @@ export const getWeekDay = () => {
     
     const weekDay = weekTimeStamps.indexOf(timeStampDay);
     return new Date(weekTimeStamps[weekDay]).toDateString();
+}
 
+export const getMonthDay = () => {
+    const timeStampDay = new Date().valueOf();
+    const weekTimeStamps = getWeekTimestamps(timeStampDay);
+    
+    const weekDay = weekTimeStamps.indexOf(timeStampDay);
+    return new Date(weekTimeStamps[weekDay]).getDate();
 }
 
 export const getCompleteDate = (timeStamp, day) => {
@@ -148,25 +156,25 @@ const convertToMinutes = time => {
     return parseInt(timeArray[0]) * 60 + parseInt(timeArray[1]);
 }
 
-const convertToTime = minutesValue => {
-    const minutes = minutesValue % 60;
-    const hours = (minutesValue - minutes) / 60;
-
-    return `${hours}:${minutes}`;
-}
-
 export const getUtilWeekDays = timeStamp => {
     const dateObject = timeStamp === null ? new Date() : new Date(timeStamp);
     const response = [];
     
-    const today = dateObject.valueOf();
+    const dateString = `${dateObject.getMonth()+1}-${dateObject.getDate()}-${dateObject.getFullYear()}`;
+    const today = new Date(dateString).valueOf();
+    
     const weekDayToday = dateObject.getDay();
 
     for(let weekDay = 1; weekDay < 6; weekDay++){
         const timeStamp = today + oneDay * (weekDay - weekDayToday);
+        const dateObjectCurrent = new Date(timeStamp);
+        
         const day = {
-            date: new Date(timeStamp).toLocaleDateString(),
-            weekDay
+            date: dateObjectCurrent.toLocaleDateString(),
+            day: dateObjectCurrent.getDate(),
+            weekDay,
+            timeStamp: today,
+            currentMonth: (dateObjectCurrent.getMonth() === dateObject.getMonth())
         };
 
         response.push(day);

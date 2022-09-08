@@ -81,9 +81,16 @@
     border-radius: 50%;
     background: var(--color-primary-dark);
     color: var(--color-text-on-dark);
+    opacity: .3;
 }
 
-.calendar-week .week-days .day time.today{
+.calendar-week .week-days .day.current-month time,
+.calendar-week .content-month-wrapper .current-month time{
+    opacity: 1;
+}
+
+.calendar-week .week-days .day time.today,
+.calendar-week .content-month-wrapper .day-content time.today{
     background: var(--color-secondary);
 }
 

@@ -50,6 +50,8 @@ export const setSelectBlock = (container, attributes) => {
     wrapper.appendChild(label);
     wrapper.appendChild(select);
     container.appendChild(wrapper);
+
+    return wrapper;
 }
 
 export default createHtml;

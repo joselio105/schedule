@@ -1,5 +1,5 @@
 import createHtml, { createButton } from "./HtmlElement.js";
-import { hours, weekDays, getWeekTitle, oneDay, getStringDay, getCompleteDate, getUtilWeekDays, getEventDuration, getWeekDay, getMonth, getWeekTimestamps, getMonthDays, getMonthInfo  } from "../tools/Date.js";
+import { hours, weekDays, getWeekTitle, oneDay, getStringDay, getCompleteDate, getUtilWeekDays, getEventDuration, getWeekDay, getMonth, getWeekTimestamps, getMonthDays, getMonthInfo, getMonthDay  } from "../tools/Date.js";
 
 const renderCalendar = (container, timeStamp=null) => {
     resetCalendarContainer(container);
@@ -78,7 +78,6 @@ const setCalendarWeekDays = (calendar, timeStamp) => {
 
 const setCalendarContent = (calendar, timeStamp) => {    
     const contentWrapper = createHtml('div', { class: "content-month-wrapper" });
-
     getMonthDays(timeStamp).forEach( date => {
         const day = createHtml('button', {
             class: 'day-content'
@@ -88,6 +87,13 @@ const setCalendarContent = (calendar, timeStamp) => {
             dateTime: date.date
         })
 
+        if(date.currentMonth){
+            day.classList.add('current-month');
+        }
+        
+        if(date.date === getWeekDay()){
+            time.classList.add('today');
+        }
         day.appendChild(time);
         contentWrapper.appendChild(day)
     })

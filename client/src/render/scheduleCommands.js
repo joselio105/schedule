@@ -1,4 +1,5 @@
 import createHtml, { setSelectBlock } from "./HtmlElement.js";
+import renderSchedule from "./schedule.js";
 
 const options = [
     {
@@ -14,12 +15,20 @@ const options = [
 export default container => {
     const commands = createHtml('nav', { class: "commands"});
     
-    setSelectBlock(commands, {
+    const selectBlock = setSelectBlock(commands, {
         id: "view",
         labelText: "Visualizar Calendário",
-        value: 1,
+        value: 0,
         options 
     });
-    
+    selectBlock.children[1].addEventListener('change', changeHandler);
     container.appendChild(commands);
+}
+
+const changeHandler = event => {
+    const render = [
+        'week',
+        'month'
+    ];
+    renderSchedule(render[event.currentTarget.value]);
 }

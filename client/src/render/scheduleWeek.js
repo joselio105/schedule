@@ -1,63 +1,6 @@
 import createHtml, { createButton } from "./HtmlElement.js";
-import { hours, weekDays, getWeekTitle, oneDay, getStringDay, getCompleteDate, getUtilWeekDays, getEventDuration, getWeekDay, getMonth  } from "../tools/Date.js";
-
-const events = [
-    {
-        id: 1,
-        day: "07/09/2022",
-        start: "10:40",
-        stop: "15:30",
-        title: "Indepedência",
-        user: {
-            name: "Fulano de Tal",
-            email: "fulano@detal.com"
-        }
-    },
-    {
-        id: 2,
-        day: "12/10/2022",
-        start: "07:30",
-        stop: "11:50",
-        title: "Criança",
-        user: {
-            name: "Fulano de Tal",
-            email: "fulano@detal.com"
-        }
-    },
-    {
-        id: 3,
-        day: "02/11/2022",
-        start: "13:30",
-        stop: "17:10",
-        title: "Finados",
-        user: {
-            name: "Fulano de Tal",
-            email: "fulano@detal.com"
-        }
-    },
-    {
-        id: 4,
-        day: "15/11/2022",
-        start: "07:30",
-        stop: "11:50",
-        title: "República",
-        user: {
-            name: "Fulano de Tal",
-            email: "fulano@detal.com"
-        }
-    },
-    {
-        id: 5,
-        day: "25/12/2022",
-        start: "13:30",
-        stop: "17:10",
-        title: "Natal",
-        user: {
-            name: "Fulano de Tal",
-            email: "fulano@detal.com"
-        }
-    }
-];
+import { hours, weekDays, getWeekTitle, oneDay, getCompleteDate, getUtilWeekDays, getEventDuration, getWeekDay, getMonth  } from "../tools/Date.js";
+import getEvents from "../api/events.js";
 
 const renderCalendar = (container, timeStamp=null) => {
     resetCalendarContainer(container);
@@ -119,28 +62,34 @@ const setCalendarHead = (container, calendar, timeStamp) => {
 const setCalendarWeekDays = (calendar, timeStamp) => {   
     const weekDaysWrapper = createHtml('div', { class: "week-days" });
     weekDaysWrapper.appendChild(createHtml('div', { class: 'day' }));
-    for(let day = 1; day < 6; day++){
+    getUtilWeekDays(timeStamp).forEach( day => {
         const weekDayTag = createHtml(
             'div',
             {
-                text: weekDays[day],
+                text: weekDays[day.weekDay],
                 class: "day"
             }
         );
         const monthDayAttributes = { 
-            text: getStringDay(timeStamp, day), 
-            dateTime: getCompleteDate(timeStamp, day)
+            text: day.day < 10 ? `0${day.day}` : `${day.day}`, 
+            dateTime: day.date
         };
-        if(getWeekDay() === getCompleteDate(timeStamp, day)){
-            monthDayAttributes.class = 'today';
-        }
         const monthDayTag = createHtml(
             'time', 
             monthDayAttributes
         );
+
+        if(getWeekDay() === getCompleteDate(timeStamp, day.weekDay)){
+            monthDayTag.classList.add('today');
+        }
+
+        if(day.currentMonth){
+            weekDayTag.classList.add('current-month');
+        }
+
         weekDayTag.appendChild(monthDayTag);
         weekDaysWrapper.appendChild(weekDayTag);
-    }
+    })
 
     calendar.appendChild(weekDaysWrapper);
 }
@@ -165,11 +114,13 @@ const setCalendarContent = (calendar, timeStamp) => {
                 classes: ['hours-content', hour ],
                 title: "Clique para adicionar um novo agendamento",
                 value: day.date
-             });
+            });
+
              content.addEventListener('click', createClickHandler);
              hoursWrapper.appendChild(content);
         })
-        renderEvents(hoursWrapper, day.date);        
+        
+        renderEvents(hoursWrapper, day);        
 
         contentWrapper.appendChild(hoursWrapper);
     });
@@ -188,9 +139,9 @@ const resetCalendarContainer = container => {
     container.appendChild(children[1]);
 }
 
-const renderEvents = (container, date) => {
-    events.forEach( event => {
-        if(date === event.day){
+const renderEvents = (container, day) => {
+    getEvents(day.timeStamp).forEach( event => {
+        if(day.date === event.day){
             const eventTag = createHtml(
                 'button', {
                     text: event.title,

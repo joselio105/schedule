@@ -3,11 +3,11 @@ import setCommands from "./scheduleCommands.js";
 import scheduleWeek from "./scheduleWeek.js";
 import scheduleMonth from "./scheduleMonth.js";
 
-export default () => {
+export default (calendarType='week') => {
     const container = document.querySelector('.content-page');
     setTitle(container);
     setCommands(container);
-    setCalendar(container);
+    setCalendar(container, calendarType);
 }
 
 const setTitle = (container, type='Laboratório') => {
