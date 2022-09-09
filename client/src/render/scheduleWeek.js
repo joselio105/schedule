@@ -1,8 +1,9 @@
 import createHtml, { createButton } from "./HtmlElement.js";
 import { hours, weekDays, getWeekTitle, oneDay, getCompleteDate, getUtilWeekDays, getEventDuration, getWeekDay, getMonth  } from "../tools/Date.js";
 import getEvents from "../api/events.js";
+import { renderRoute } from "../routes/management.js";
 
-const renderCalendar = (container, timeStamp=null) => {
+const renderCalendar = (timeStamp=null) => {
     resetCalendarContainer(container);
 
     const calendar = createHtml('div', { class: "calendar-week" });
@@ -10,7 +11,7 @@ const renderCalendar = (container, timeStamp=null) => {
     setCalendarWeekDays(calendar, timeStamp);
     setCalendarContent(calendar, timeStamp);
     
-    container.appendChild(calendar);
+    return calendar;
 }
 
 const setCalendarHead = (container, calendar, timeStamp) => {  
@@ -48,8 +49,8 @@ const setCalendarHead = (container, calendar, timeStamp) => {
         class: 'calendar-subtitle'
     });
 
-    buttonBack.addEventListener('click', event => {clickHandler(container, event)});
-    buttonFoward.addEventListener('click', event => {clickHandler(container, event)});
+    buttonBack.addEventListener('click', clickHandler);
+    buttonFoward.addEventListener('click', clickHandler);
 
     calendarInfoContainer.appendChild(calendarTitle);
     calendarInfoContainer.appendChild(calendarSubTitle);
@@ -141,59 +142,46 @@ const resetCalendarContainer = container => {
 
 const renderEvents = (container, day) => {
     getEvents(day.timeStamp).forEach( event => {
-        if(day.date === event.day){
-            const eventTag = createHtml(
-                'button', {
-                    text: event.title,
-                    id: event.id,
-                    classes: [
-                        'schedule-event'
-                    ]
-                }
-            )
-            const eventStart = getEventDuration( event.start) /10;
-            const eventDuration = getEventDuration( event.stop, event.start) /10
-            eventTag.style.top = `${eventStart}rem`;
-            eventTag.style.height = `${eventDuration}rem`;
+        const eventTag = createHtml(
+            'button', {
+                text: event.title,
+                id: event.id,
+                classes: [
+                    'schedule-event'
+                ]
+            }
+        )
+        const eventStart = getEventDuration( event.start) /10;
+        const eventDuration = getEventDuration( event.stop, event.start) /10
+        eventTag.style.top = `${eventStart}rem`;
+        eventTag.style.height = `${eventDuration}rem`;
 
-            eventTag.addEventListener('click', createClickHandler);
+        eventTag.addEventListener('click', createClickHandler);
 
-            container.appendChild(eventTag);
-        
-        }
+        container.appendChild(eventTag);
     })
 }
 
 const createClickHandler = event => {
-    const buttonValue = event.currentTarget.value;
-    const buttonId = event.currentTarget.id;
-    const valueString = buttonValue.split('/');
-
-    console.log(
-        buttonValue,
-        buttonId
-        )
+    renderRoute('scheduleForm', {
+        type: "week",
+        value: event.currentTarget.value,
+        id: event.currentTarget.id
+    });
 }
 
-const clickHandler = (container, event) => {
+const clickHandler = event => {
     const buttonName = event.currentTarget.classList[1];
     const buttonValue = event.currentTarget.value === 'null'
         ? new Date().valueOf()
         : parseInt(event.currentTarget.value)
     ;
+    const timeStamp = buttonName === "back" ? buttonValue -  oneDay * 7 : buttonValue +  oneDay * 7;
     
-    const actions = {
-        back: timeStamp => {
-            const newDate = timeStamp -  oneDay * 7;
-            renderCalendar(container, newDate); 
-        },
-        foward: timeStamp => {
-            const newDate = timeStamp +  oneDay * 7;
-            renderCalendar(container, newDate); 
-        }
-    }
-    
-    actions[buttonName](buttonValue);
+    renderRoute("schedule", {
+        type: "week",
+        timeStamp
+    });
 }
 
 export default renderCalendar;

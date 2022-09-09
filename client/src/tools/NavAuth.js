@@ -1,5 +1,5 @@
 import createElement from "../render/HtmlElement.js";
-import { getUser, isAuthenticated, logout } from "./Auth";
+import { getUser, isAuthenticated, logout } from "./Auth.js";
 import { renderRoute } from "../routes/management.js";
 
 const navAuth = document.querySelector('.auth-nav');

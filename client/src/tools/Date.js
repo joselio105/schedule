@@ -169,11 +169,14 @@ export const getUtilWeekDays = timeStamp => {
         const timeStamp = today + oneDay * (weekDay - weekDayToday);
         const dateObjectCurrent = new Date(timeStamp);
         
+        const daYString = dateObjectCurrent.getDate() < 10 ? `0${dateObject.getDate()}` : `${dateObject.getDate()}`;
+        const monthString = dateObjectCurrent.getMonth() < 10 ? `0${dateObject.getMonth()}` : `${dateObject.getMonth()}`;
+        
         const day = {
-            date: dateObjectCurrent.toLocaleDateString(),
+            date: `${dateObjectCurrent.getFullYear()}/${monthString}/${daYString}`,
             day: dateObjectCurrent.getDate(),
             weekDay,
-            timeStamp: today,
+            timeStamp: dateObjectCurrent.valueOf(),
             currentMonth: (dateObjectCurrent.getMonth() === dateObject.getMonth())
         };
 

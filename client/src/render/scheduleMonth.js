@@ -1,7 +1,9 @@
 import createHtml, { createButton } from "./HtmlElement.js";
-import { hours, weekDays, getWeekTitle, oneDay, getStringDay, getCompleteDate, getUtilWeekDays, getEventDuration, getWeekDay, getMonth, getWeekTimestamps, getMonthDays, getMonthInfo, getMonthDay  } from "../tools/Date.js";
+import { weekDays, getWeekTitle, oneDay, getStringDay, getCompleteDate, getWeekDay, getMonth, getMonthDays, getMonthInfo } from "../tools/Date.js";
+import getEvents from "../api/events.js";
+import { renderRoute } from "../routes/management.js";
 
-const renderCalendar = (container, timeStamp=null) => {
+const renderCalendar = (timeStamp=null) => {
     resetCalendarContainer(container);
 
     const calendar = createHtml('div', { class: "calendar-week" });
@@ -9,12 +11,10 @@ const renderCalendar = (container, timeStamp=null) => {
     setCalendarWeekDays(calendar, timeStamp);
     setCalendarContent(calendar, timeStamp);
     
-    container.appendChild(calendar);
+    return calendar;
 }
 
 const setCalendarHead = (container, calendar, timeStamp) => {  
-    const weekTitle = getWeekTitle(timeStamp);
-
     const head = createHtml('head', { class: "calendar-head"});
     const buttonBack = createButton(
         { 
@@ -94,11 +94,31 @@ const setCalendarContent = (calendar, timeStamp) => {
         if(date.date === getWeekDay()){
             time.classList.add('today');
         }
+
         day.appendChild(time);
+        renderEvents(day, date);
         contentWrapper.appendChild(day)
     })
 
     calendar.appendChild(contentWrapper);
+}
+
+const renderEvents = (container, day) => {
+    getEvents(day.timestamp).forEach( event => {
+        const eventTag = createHtml(
+            'button', {
+                text: event.title,
+                id: event.id,
+                classes: [
+                    'schedule-event'
+                ]
+            }
+        );
+
+        eventTag.addEventListener('click', createClickHandler);
+
+        container.appendChild(eventTag);
+    })
 }
 
 const resetCalendarContainer = container => {
@@ -113,14 +133,12 @@ const resetCalendarContainer = container => {
 }
 
 const createClickHandler = event => {
-    const buttonValue = event.currentTarget.value;
-    const buttonId = event.currentTarget.id;
-    const valueString = buttonValue.split('/');
 
-    console.log(
-        buttonValue,
-        buttonId
-        )
+    renderRoute('scheduleForm', {
+        type: "month",
+        value: event.currentTarget.value,
+        id: event.currentTarget.id
+    });
 }
 
 const clickHandler = (container, event) => {
@@ -130,19 +148,12 @@ const clickHandler = (container, event) => {
         : parseInt(event.currentTarget.value)
     ;
     const monthInfo = getMonthInfo(buttonValue);
-
-    const actions = {
-        back: monthInfo => {
-            const newDate = monthInfo.firstDay - oneDay;
-            renderCalendar(container, newDate); 
-        },
-        foward: monthInfo => {
-            const newDate = monthInfo.lastDay +  oneDay;
-            renderCalendar(container, newDate); 
-        }
-    }
+    const timeStamp = buttonName === "back" ? monthInfo.firstDay -  oneDay : monthInfo.lastDay +  oneDay;
     
-    actions[buttonName](monthInfo);
+    renderRoute("schedule", {
+        type: "month",
+        timeStamp
+    });
 }
 
 export default renderCalendar;

@@ -144,7 +144,8 @@
     transition: transform .5s;
 }
 
-.calendar-week .content-wrapper .day-content .schedule-event:hover{
+.calendar-week .content-wrapper .day-content .schedule-event:hover,
+.calendar-week .content-month-wrapper .day-content .schedule-event:hover{
     transform: scale(1.2) translate(-.8rem);
 }
 
@@ -154,10 +155,11 @@
 }
 
 .calendar-week .content-month-wrapper .day-content{
-    height: 6rem;
+    min-height: 10rem;
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     background: var(--color-primary-light);
     border: none;
     border-right: 1px solid var(--color-primary);
@@ -167,6 +169,16 @@
 
 .calendar-week .content-month-wrapper .day-content:hover{
     background: var(--color-primary-dark);
+}
+
+.calendar-week .content-month-wrapper .day-content .schedule-event{
+    width: 100%;
+    border: none;
+    background: var(--color-secondary);
+    color: var(--color-text-on-dark);
+    margin-bottom: .3rem;
+    padding: .3rem;
+    transition: transform .5s;
 }
 
 .calendar-week .content-month-wrapper .day-content:hover time{

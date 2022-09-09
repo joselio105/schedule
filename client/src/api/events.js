@@ -1,28 +1,28 @@
-import { getMonthInfo, getUtilWeekDays, oneDay, oneWeek } from "../tools/Date.js";
+import { getMonthInfo, getStringDay, getUtilWeekDays, oneDay, oneWeek } from "../tools/Date.js";
 
 const events = [
     {
         id: 1,
-        day: "07/09/2022",
-        start: "13:30",
-        stop: "15:20",
-        title: "Indepedência",
-        description: "",
+        day: "2022/09/07",
+        start: "09:20",
+        stop: "11:00",
+        title: "Aula 2",
         repeat: {
-            type: "",
+            type: "week",
             times: 0
         },
         user: {
             name: "Fulano de Tal",
+            description: "",
             email: "fulano@detal.com"
         }
     },
     {
-        id: 20,
-        day: "09/09/2022",
+        id: 3,
+        day: "2022/09/06",
         start: "07:30",
         stop: "09:10",
-        title: "Aula",
+        title: "Aula 1",
         repeat: {
             type: "week",
             times: 5
@@ -35,62 +35,14 @@ const events = [
     },
     {
         id: 2,
-        day: "05/09/2022",
-        start: "09:10",
-        stop: "11:50",
+        day: "2022/09/05",
+        start: "11:30",
+        stop: "14:20",
         title: "Curso",
         description: "",
         repeat: {
             type: "day",
-            times: 3
-        },
-        user: {
-            name: "Fulano de Tal",
-            email: "fulano@detal.com"
-        }
-    },
-    {
-        id: 3,
-        day: "02/11/2022",
-        start: "13:30",
-        stop: "17:10",
-        title: "Finados",
-        description: "",
-        repeat: {
-            type: "",
-            times: 0
-        },
-        user: {
-            name: "Fulano de Tal",
-            email: "fulano@detal.com"
-        }
-    },
-    {
-        id: 4,
-        day: "15/11/2022",
-        start: "07:30",
-        stop: "11:50",
-        title: "República",
-        description: "",
-        repeat: {
-            type: "",
-            times: 0
-        },
-        user: {
-            name: "Fulano de Tal",
-            email: "fulano@detal.com"
-        }
-    },
-    {
-        id: 5,
-        day: "25/12/2022",
-        start: "13:30",
-        stop: "17:10",
-        title: "Natal",
-        description: "",
-        repeat: {
-            type: "",
-            times: 0
+            times: 4
         },
         user: {
             name: "Fulano de Tal",
@@ -99,67 +51,78 @@ const events = [
     }
 ];
 
-export default (timeStamp, calendarType='week') => {
-    const days = getUtilWeekDays(timeStamp)
-    const lastDayKey = days.length - 1;
-
-    // repeatEvents();
-    console.log(events)
+export default timeStamp => {
+    const eventsRepeated = repeatEvents();
     
-    return events.filter(event => {
-        event.timeStamp = getTimeStamp(event.day);
-        const weekTimeStamps = {
-            start: getTimeStamp(days[0].date),
-            stop: getTimeStamp(days[lastDayKey].date)
-        };
-        const beforeWeekStarts = event.timeStamp >= weekTimeStamps.start;
-        const afterWeekStops = event.timeStamp <= weekTimeStamps.stop;
+    return events.concat(eventsRepeated).filter( 
+        event => getTimeStamp(event.day) === timeStamp
+    );
+}
 
-        return beforeWeekStarts && afterWeekStops;
-    })
+export const getEvent = eventId => {
+    return events.find(event => event.id === eventId);
 }
 
 const repeatEvents = () => {
-    events.forEach( (event, eventKey) => {
-        while(event.repeat.times > 1){
-            doRepeat[event.repeat.type](event, eventKey);
+    const response = [];
+
+    events.forEach( event => {
+        let iterator = 1;
+        while(iterator < event.repeat.times){
+            response.push(doRepeat[event.repeat.type](event, iterator));
+
+            iterator++;
         }
     })
+
+    return response;
 }
 
 const doRepeat = {
-    day: (event, eventKey) => {
+    day: (event, iterator) => {
         const timeStamp = getTimeStamp(event.day);
-        event.day = new Date(timeStamp + oneDay).toLocaleDateString();
-        event.repeat.times--;
-        events[eventKey].repeat.times--;
+        const dateObject = new Date(timeStamp + iterator * oneDay);
+        const daYString = dateObject.getDate() < 10 ? `0${dateObject.getDate()}` : `${dateObject.getDate()}`;
+        const monthString = dateObject.getMonth() < 10 ? `0${dateObject.getMonth()}` : `${dateObject.getMonth()}`;
 
-        events.push(event);
+        return {
+            id: event.id,
+            day: `${dateObject.getFullYear()}/${monthString}/${daYString}`,
+            start: event.start,
+            stop: event.stop,
+            title: event.title,
+            description: event.description,
+            repeat: {
+                type: event.repeat.type,
+                times: event.repeat.times - 1
+            },
+            user: event.user
+        };
     },
-    week: (event, eventKey) => {
+    week: (event, iterator) => {
         const timeStamp = getTimeStamp(event.day);
-        event.day = new Date(timeStamp + oneWeek).toLocaleDateString();
-        event.repeat.times--;
-        events[eventKey].repeat.times--;
-
-        events.push(event);},
-    /* month: event => {
-        const timeStamp = getTimeStamp(event.day);
-        event.day = new Date(timeStamp + getOneMonth(timeStamp)).toLocaleDateString();
-        event.repeat.times--;
-
-        events.push(event);}, */
-}
-
-const getOneMonth = timeStamp => {
-    const monthInfo = getMonthInfo(timeStamp);
-
-    return monthInfo.lastDay * oneDay;
+        const dateObject = new Date(timeStamp + iterator * oneWeek);
+        const daYString = dateObject.getDate() < 10 ? `0${dateObject.getDate()}` : `${dateObject.getDate()}`;
+        const monthString = dateObject.getMonth() < 10 ? `0${dateObject.getMonth()}` : `${dateObject.getMonth()}`;
+        
+        return {
+            id: event.id,
+            day: `${dateObject.getFullYear()}/${monthString}/${daYString}`,
+            start: event.start,
+            stop: event.stop,
+            title: event.title,
+            description: event.description,
+            repeat: {
+                type: event.repeat.type,
+                times: event.repeat.times - 1
+            },
+            user: event.user
+        };
+    }
 }
 
 const getTimeStamp = date => {
-    const dateArray = date.split('/');
-    const dateObject = new Date(`${dateArray[1]}-${dateArray[0]}-${dateArray[2]}`);
+    const dateObject = new Date(date);
     
     return dateObject.valueOf();
 }

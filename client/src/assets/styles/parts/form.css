@@ -69,12 +69,12 @@
 }
 
 #container .content-page form .form-buttons-wrapper .submit{
-    background-color: var(--color-seconday);
+    background-color: var(--color-secondary);
     color: var(--color-text-on-dark);
 }
 
 #container .content-page form button:hover{
-    transform: scale(.9);
+    transform: scale(1.1) translateX(1.5rem);
 }
 
 #container .content-page form .buttons{
