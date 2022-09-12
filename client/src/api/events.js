@@ -3,30 +3,11 @@ import { getMonthInfo, getStringDay, getUtilWeekDays, oneDay, oneWeek } from "..
 const events = [
     {
         id: 1,
-        day: "2022/09/07",
+        parentId: null,
+        day: "2022/09/12",
         start: "09:20",
-        stop: "11:00",
-        title: "Aula 2",
-        repeat: {
-            type: "week",
-            times: 0
-        },
-        user: {
-            name: "Fulano de Tal",
-            description: "",
-            email: "fulano@detal.com"
-        }
-    },
-    {
-        id: 3,
-        day: "2022/09/06",
-        start: "07:30",
-        stop: "09:10",
+        stop: "11:50",
         title: "Aula 1",
-        repeat: {
-            type: "week",
-            times: 5
-        },
         user: {
             name: "Fulano de Tal",
             description: "",
@@ -35,26 +16,86 @@ const events = [
     },
     {
         id: 2,
-        day: "2022/09/05",
-        start: "11:30",
-        stop: "14:20",
-        title: "Curso",
-        description: "",
-        repeat: {
-            type: "day",
-            times: 4
-        },
+        parentId: 1,
+        day: "2022/09/13",
+        start: "09:20",
+        stop: "11:50",
+        title: "Aula 1",
         user: {
             name: "Fulano de Tal",
+            description: "",
             email: "fulano@detal.com"
         }
-    }
+    },
+    {
+        id: 3,
+        parentId: 1,
+        day: "2022/09/14",
+        start: "09:20",
+        stop: "11:50",
+        title: "Aula 1",
+        user: {
+            name: "Fulano de Tal",
+            description: "",
+            email: "fulano@detal.com"
+        }
+    },
+    {
+        id: 4,
+        parentId: 1,
+        day: "2022/09/15",
+        start: "09:20",
+        stop: "11:50",
+        title: "Aula 1",
+        user: {
+            name: "Fulano de Tal",
+            description: "",
+            email: "fulano@detal.com"
+        }
+    },
+    {
+        id: 5,
+        parentId: 1,
+        day: "2022/09/16",
+        start: "09:20",
+        stop: "11:50",
+        title: "Aula 1",
+        user: {
+            name: "Fulano de Tal",
+            description: "",
+            email: "fulano@detal.com"
+        }
+    },
+    {
+        id: 6,
+        parentId: null,
+        day: "2022/09/13",
+        start: "12:00",
+        stop: "15:50",
+        title: "Aula 2",
+        user: {
+            name: "Fulano de Tal",
+            description: "",
+            email: "fulano@detal.com"
+        }
+    },
+    {
+        id: 7,
+        parentId: 6,
+        day: "2022/09/15",
+        start: "12:00",
+        stop: "15:50",
+        title: "Aula 2",
+        user: {
+            name: "Fulano de Tal",
+            description: "",
+            email: "fulano@detal.com"
+        }
+    },
 ];
 
 export default timeStamp => {
-    const eventsRepeated = repeatEvents();
-    
-    return events.concat(eventsRepeated).filter( 
+    return events.filter( 
         event => getTimeStamp(event.day) === timeStamp
     );
 }

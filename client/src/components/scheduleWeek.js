@@ -1,4 +1,4 @@
-import createHtml, { createButton } from "./HtmlElement.js";
+import createHtml, { createButton } from "../render/HtmlElement.js";
 import { hours, weekDays, getWeekTitle, oneDay, getCompleteDate, getUtilWeekDays, getEventDuration, getWeekDay, getMonth  } from "../tools/Date.js";
 import getEvents from "../api/events.js";
 import { renderRoute } from "../routes/management.js";
@@ -146,6 +146,7 @@ const renderEvents = (container, day) => {
             'button', {
                 text: event.title,
                 id: event.id,
+                title: "Clique para visualizar este agendamento",
                 classes: [
                     'schedule-event'
                 ]
@@ -163,9 +164,12 @@ const renderEvents = (container, day) => {
 }
 
 const createClickHandler = event => {
-    renderRoute('scheduleForm', {
+    const value = event.currentTarget.value;
+    const routeName = value.length > 0 ? 'scheduleForm' : 'scheduleView';
+
+    renderRoute(routeName, {
         type: "week",
-        value: event.currentTarget.value,
+        value,
         id: event.currentTarget.id
     });
 }

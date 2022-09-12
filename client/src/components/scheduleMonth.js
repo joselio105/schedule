@@ -1,4 +1,4 @@
-import createHtml, { createButton } from "./HtmlElement.js";
+import createHtml, { createButton } from "../render/HtmlElement.js";
 import { weekDays, getWeekTitle, oneDay, getStringDay, getCompleteDate, getWeekDay, getMonth, getMonthDays, getMonthInfo } from "../tools/Date.js";
 import getEvents from "../api/events.js";
 import { renderRoute } from "../routes/management.js";
@@ -96,6 +96,7 @@ const setCalendarContent = (calendar, timeStamp) => {
         }
 
         day.appendChild(time);
+        
         renderEvents(day, date);
         contentWrapper.appendChild(day)
     })
@@ -133,10 +134,12 @@ const resetCalendarContainer = container => {
 }
 
 const createClickHandler = event => {
+    const value = event.currentTarget.value;
+    const routeName = value.length > 0 ? 'scheduleForm' : 'scheduleView';
 
-    renderRoute('scheduleForm', {
+    renderRoute(routeName, {
         type: "month",
-        value: event.currentTarget.value,
+        value,
         id: event.currentTarget.id
     });
 }

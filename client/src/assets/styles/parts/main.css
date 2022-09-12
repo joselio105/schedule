@@ -11,11 +11,44 @@
 	padding: 10px 15px;
 }
 
+#container .content-page .description,
+#container .content-page .schedule-info{
+    font-size: 1.2rem;
+    line-height: 1.2;
+    padding: 1rem;
+}
+
+#container .content-page .schedule-info time{
+    font-weight: 700;
+}
+
 #container .content-page .commands{
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
     margin-top: 2rem;
+    gap: .5rem;
+}
+
+#container .content-page .commands .button{
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .5rem;   
+    padding: 1rem; 
+    font-size: 1rem;
+    text-transform: uppercase;
+    transition: transform .3s;    
+}
+
+#container .content-page .commands .delete{
+    background-color: var(--color-secondary);
+    color: var(--color-text-on-dark);
+}
+
+#container .content-page .commands .button:hover{
+    transform: scale(1.1) translate(-.8rem, -.8rem);
 }
 
 

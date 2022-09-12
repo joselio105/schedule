@@ -1,5 +1,4 @@
-import createHtml, { setSelectBlock } from "./HtmlElement.js";
-import renderSchedule from "../views/Schedule.js";
+import createHtml, { createButton, setSelectBlock } from "../render/HtmlElement.js";
 import { renderRoute } from "../routes/management.js";
 
 const options = [
@@ -17,17 +16,39 @@ const options = [
 
 export default (calendarType) => {
     const commands = createHtml('nav', { class: "commands"});
-    const value = options.find(option => option.type === calendarType).value;
     
+    const value = options.find(option => option.type === calendarType).value;
+    const buttonCreate = createButton(
+        { 
+            class: "button",
+            title: "Criar novo evento",
+            value: options[value].type
+         }, 
+        { 
+            src: "./src/assets/images/icons/plus.svg",
+            alt: "novo evento"
+         }
+    );
+    
+    commands.appendChild(buttonCreate);
+
     const selectBlock = setSelectBlock(commands, {
         id: "view",
         labelText: "Visualizar Calendário",
         value,
         options 
     });
+    buttonCreate.addEventListener('click', createHandler);
     selectBlock.children[1].addEventListener('change', changeHandler);
     
     return commands;
+}
+
+const createHandler = event => {
+    renderRoute('scheduleForm', {
+        type: event.currentTarget.value,
+        id: ''
+    });
 }
 
 const changeHandler = event => {

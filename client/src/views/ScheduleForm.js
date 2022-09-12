@@ -7,6 +7,7 @@ import createFormSelect from "../components/FormBlockSelect";
 import { renderRoute } from "../routes/management.js";
 
 export default async attributes => {
+    const { type } = attributes;
     let event = {};
     
     if(attributes.id.length > 0){
@@ -16,7 +17,7 @@ export default async attributes => {
     return [
         setTitle(),
         setFeedback(),
-        setForm(event)
+        setForm(event, type)
     ];
 }
 
@@ -24,15 +25,14 @@ const setTitle = () => {
     return createHtml('h2', { text: "Novo Agendamento" });
 }
 
-const setForm = event => {
+const setForm = (event, type) => {
     const fields = setFields(event);
-    const buttons = setButtons(event);
+    const buttons = setButtons(event, type);
 
     return createForm(fields, buttons);
 }
 
 const setFields = event => {
-    console.log(event)
     return [
         createFormField(
             "title",
@@ -51,7 +51,25 @@ const setFields = event => {
                 class: "description",
                 value: event.title ?  event.title : ''
             }
+        ), 
+        scheduleFields(),       
+        createFormField(
+            "repeatTimes",
+            "Quantidade de repetições",
+            {
+                type: "number",
+                step: 1,
+                value: event.repeat && event.repeat.times ? event.repeat.times : 0
+            }
         ),
+        createHtml('span', { text: "####### Não esqueça do tipo de repetição #######"})
+    ];
+}
+
+const scheduleFields = () => {
+    const fieldSet = createHtml('fieldset');
+    const legend = createHtml('legend', { text: "Dados do agendamento"});
+    const fields = [
         createFormField(
             "day",
             "Dia",
@@ -80,25 +98,21 @@ const setFields = event => {
                 value: event.stop ?  event.stop : ''
             }
         ),
-        createFormField(
-            "repeatTimes",
-            "Quantidade de repetições",
-            {
-                type: "number",
-                step: 1,
-                value: event.repeat && event.repeat.times ? event.repeat.times : 0
-            }
-        ),
-        createHtml('span', { text: "####### Não esqueça do tipo de repetição #######"})
     ];
+
+    fieldSet.appendChild(legend);
+    fields.forEach( field => fieldSet.appendChild(field));
+
+    return fieldSet;
 }
 
-const setButtons = event => {
+const setButtons = (event, type) => {
     const buttons = [
         createHtml('button', {
             class: 'back',
             text: 'voltar',
-            id: 'schedule'
+            id: 'schedule',
+            value: type
         }),
         createHtml('button', { 
             type: 'submit', 
@@ -119,7 +133,8 @@ const setButtons = event => {
 const handleBack = event => {
     event.preventDefault();
     const backTo = event.currentTarget.id;
-    renderRoute(backTo);
+    
+    renderRoute(backTo, { type: event.currentTarget.value });
 }
 
 const handleSubmit = event => {}
