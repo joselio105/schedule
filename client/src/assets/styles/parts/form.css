@@ -109,3 +109,20 @@
     border: 1px solid var(--color-primary-dark);
     border-radius: 15px;
 }
+
+#container .content-page form fieldset{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.2rem;
+    border: 1px solid var(--color-primary);
+    border-radius: .8rem;
+    color: var(--color-text-on-primay);
+}
+#container .content-page form fieldset .check-box input{
+    display: none;
+}
+
+#container .content-page form .hide{
+    display: none;
+}

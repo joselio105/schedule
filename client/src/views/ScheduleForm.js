@@ -52,21 +52,12 @@ const setFields = event => {
                 value: event.title ?  event.title : ''
             }
         ), 
-        scheduleFields(),       
-        createFormField(
-            "repeatTimes",
-            "Quantidade de repetições",
-            {
-                type: "number",
-                step: 1,
-                value: event.repeat && event.repeat.times ? event.repeat.times : 0
-            }
-        ),
-        createHtml('span', { text: "####### Não esqueça do tipo de repetição #######"})
+        getScheduleFields(event),       
+        getRepeatFields(event)
     ];
 }
 
-const scheduleFields = () => {
+const getScheduleFields = event => {
     const fieldSet = createHtml('fieldset');
     const legend = createHtml('legend', { text: "Dados do agendamento"});
     const fields = [
@@ -104,6 +95,65 @@ const scheduleFields = () => {
     fields.forEach( field => fieldSet.appendChild(field));
 
     return fieldSet;
+}
+
+const getRepeatFields = event => {   
+    const fieldSet = createHtml('fieldset');
+    const legend = createHtml('legend', { text: "Repetir evento"});
+
+    const fields = [
+        setCheckBox(),
+        createFormField('repaetTimes', "Quantidade de repetições", {
+            type: "number",
+            step: 1, 
+            min: 1,
+            value: 1
+        }),
+        createFormSelect('repeatFrequency', "Frequência", 
+        {
+            "Diário": "day",
+            "Semanal": "week",
+            "Mensal": "month",
+            "Anual": "year"
+        })
+    ];
+
+    fieldSet.appendChild(legend);
+    fields.forEach( field => fieldSet.appendChild(field));
+
+    if(!event.hasOwnProperty('id')){
+        return fieldSet;
+    }
+    
+    return createHtml('div');
+}
+
+const setCheckBox = () => {
+    const label = createHtml('label', { 
+        for: "repeat", 
+        classes: ["check-box"],
+        text: "Repetir"
+    });
+    const input = createHtml('input', { id: "repeat", type: "checkbox" });
+
+    input.addEventListener('change', repeatHandler);
+
+    label.appendChild(input);
+
+    return label;
+}
+
+const repeatHandler = event => {
+    const fieldsetChildren = event.path[2].children;
+    const isChecked = event.currentTarget.checked;
+    
+    if(isChecked){
+        fieldsetChildren[2].classList.remove('hide');
+        fieldsetChildren[3].classList.remove('hide');
+    }else{
+        fieldsetChildren[2].classList.add('hide');
+        fieldsetChildren[3].classList.add('hide');     
+    }
 }
 
 const setButtons = (event, type) => {
