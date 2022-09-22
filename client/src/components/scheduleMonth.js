@@ -104,8 +104,9 @@ const setCalendarContent = (calendar, timeStamp) => {
     calendar.appendChild(contentWrapper);
 }
 
-const renderEvents = (container, day) => {
-    getEvents(day.timestamp).forEach( event => {
+const renderEvents = async (container, day) => {
+    const events = await getEvents(day.apiDate);
+    events.forEach( event => {
         const eventTag = createHtml(
             'button', {
                 text: event.title,

@@ -1,10 +1,10 @@
 import { getEvent } from "../api/events.js";
 import createHtml from "../render/HtmlElement.js"
 import { renderRoute } from "../routes/management.js";
-import { getMonth } from "../tools/Date.js";
+import { getMonth, intToHoursString, months } from "../tools/Date.js";
 
 export default async attributes => {
-    const event = getEvent(parseInt(attributes.id));
+    const event = await getEvent(parseInt(attributes.id));
     
     return [
         setTitle(event),
@@ -26,25 +26,26 @@ const setDescription = event => {
 }
 
 const setSchedule = event => {
+    const [year, month, day] = event.day.split('-');
     const dateObject = new Date(`${event.day} ${event.start}`);
     const dateObjectStop = new Date(`${event.day} ${event.stop}`);
-    const month = getMonth(dateObject.valueOf()).replace('/', ' de ');
+    const monthString = months[parseInt(month)-1];
     const scheduleContainer = createHtml('div', { class: "schedule-info" });
     
     const contents = [
         document.createTextNode("Evento agendado para o dia "),
         createHtml('time', { 
-            text: `${dateObject.getDate()} de ${month}`,
+            text: `${day} de ${monthString} de ${year}`,
             dateTime: event.day
         }),
         document.createTextNode(". Das "),
         createHtml('time', {
-            text: `${dateObject.getHours()}h${dateObject.getMinutes()}`,
+            text: intToHoursString(event.start),
             dateTime: event.start
         }),
         document.createTextNode(" às "),
         createHtml('time', {
-            text: `${dateObjectStop.getHours()}h${dateObjectStop.getMinutes()}`,
+            text: intToHoursString(event.stop),
             dateTime: event.start
         }),
         document.createTextNode(".")
@@ -77,13 +78,13 @@ const setButtons = (event, attributes) => {
         })
     ];
 
-    setActions(buttons, event);
+    setActions(buttons);
 
     buttons.forEach( button => buttonsWrapper.appendChild(button));
     return buttonsWrapper;
 }
 
-const setActions = (buttons, event) => {
+const setActions = buttons => {
     const buttonBack = buttons.find(button => button.id === "button-back");
     const buttonUpdate = buttons.find(button => button.id === "button-update");
     const buttonDelete = buttons.find(button => button.id === "button-delete");
@@ -97,6 +98,8 @@ const backHandler = event => {
     renderRoute("schedule", {type: event.currentTarget.value});
 }
 
-const updateHandler = event => {}
+const updateHandler = event => {
+    renderRoute("scheduleForm", {id: event.currentTarget.value});
+}
 
 const deleteHandler = event => {}

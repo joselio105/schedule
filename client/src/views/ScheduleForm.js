@@ -5,13 +5,15 @@ import createForm from "../components/Form.js";
 import createFormField from "../components/FormBlockInput";
 import createFormSelect from "../components/FormBlockSelect";
 import { renderRoute } from "../routes/management.js";
+import { intToHoursString } from "../tools/Date.js";
+import { put } from "../api/server.js";
 
 export default async attributes => {
     const { type } = attributes;
     let event = {};
-    
+
     if(attributes.id.length > 0){
-        event = getEvent(parseInt(attributes.id));
+        event = await getEvent(parseInt(attributes.id));
     }
     
     return [
@@ -25,11 +27,14 @@ const setTitle = () => {
     return createHtml('h2', { text: "Novo Agendamento" });
 }
 
-const setForm = (event, type) => {
-    const fields = setFields(event);
-    const buttons = setButtons(event, type);
+const setForm = (schedule, type) => {
+    const fields = setFields(schedule);
+    const buttons = setButtons(schedule, type);
 
-    return createForm(fields, buttons);
+    const form = createForm(fields, buttons);
+    form.addEventListener('submit', event => handleSubmit(event, schedule.id));
+
+    return form;
 }
 
 const setFields = event => {
@@ -49,7 +54,7 @@ const setFields = event => {
             {
                 placeholder: "Digite a descrição do agendamento",
                 class: "description",
-                value: event.title ?  event.title : ''
+                value: event.title ?  event.description : ''
             }
         ), 
         getScheduleFields(event),       
@@ -60,6 +65,7 @@ const setFields = event => {
 const getScheduleFields = event => {
     const fieldSet = createHtml('fieldset');
     const legend = createHtml('legend', { text: "Dados do agendamento"});
+    
     const fields = [
         createFormField(
             "day",
@@ -77,7 +83,7 @@ const getScheduleFields = event => {
             {
                 required: true,
                 type: "time",
-                value: event.start ?  event.start : ''
+                value: event.start ?  intToHoursString(event.start).replace('h', ':') : ''
             }
         ),
         createFormField(
@@ -86,7 +92,7 @@ const getScheduleFields = event => {
             {
                 required: true,
                 type: "time",
-                value: event.stop ?  event.stop : ''
+                value: event.stop ?  intToHoursString(event.stop).replace('h', ':') : ''
             }
         ),
     ];
@@ -162,7 +168,7 @@ const setButtons = (event, type) => {
             class: 'back',
             text: 'voltar',
             id: 'schedule',
-            value: type
+            value: type ? type : 'month'
         }),
         createHtml('button', { 
             type: 'submit', 
@@ -173,12 +179,10 @@ const setButtons = (event, type) => {
     ];
 
     buttons[0].addEventListener('click', handleBack);
-    buttons[1].addEventListener('click', handleSubmit);
+    // buttons[1].addEventListener('click', handleSubmit);
 
     return buttons;
 }
-
-
 
 const handleBack = event => {
     event.preventDefault();
@@ -187,4 +191,10 @@ const handleBack = event => {
     renderRoute(backTo, { type: event.currentTarget.value });
 }
 
-const handleSubmit = event => {}
+const handleSubmit = async (event, id) => {
+    event.preventDefault();
+
+    const result = await put('schedules', event.currentTarget, id);
+
+    console.log(result)
+}

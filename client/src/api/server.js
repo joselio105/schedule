@@ -4,19 +4,22 @@ const getResponse = async (controller, init) => {
     const url = 'http://localhost/arqAdmin/server/?';
     
     const request = new Request(`${url}${controller}`, init);
-    const response = await fetch(request).then(resp=>resp.json()).then(resp=>resp);
+    const response = await fetch(request).then(resp=>resp);
 
     return response;
 }
 
-export const get = async (controller) => {
+export const get = async (controller, params={}) => {
     const token = getToken();
     const headers = new Headers();
+
+    const paramsArray = Object.keys(params).map(param => (`${param}=${params[param]}`));
+    const paramsString = paramsArray.length > 0 ? `&${paramsArray.join('&')}` : '';
 
     if(token){
         headers.set('Authorization', `Bearer ${token}`);
     }
-    const response = await getResponse(controller, {
+    const response = await getResponse(controller + paramsString, {
         method: 'GET',
         headers
     });
@@ -62,18 +65,14 @@ const getFormObject = form => {
 }
 
 const getFormJson = (form, id) => {
-    const body =  {};
+    const body =  { id };
 
-    Object.keys(form.children).forEach(key => {
-        const formChild = form.children[key];
-        const formChildField = formChild.children[1];
-
-        if(formChildField.id){
-            body[formChildField.id] = formChildField.value;
-        }        
-    })
-    body[id.name] =  id.value;
+    const formData = new FormData(form);
+    for (const key of formData.keys()) {
+        body[key] = formData.get(key)
+    }
     body.user_id = getUser().id;
+    
 
     return JSON.stringify(body);
 }

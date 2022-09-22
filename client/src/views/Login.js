@@ -12,7 +12,7 @@ const fields = [
         type: 'email',
         required: true
     }),
-    FormBlockInput('senha', 'Senha', {
+    FormBlockInput('password', 'Senha', {
         type: 'password',
         placeholder: 'Digite sua senha',
         required: true
@@ -26,6 +26,8 @@ const buttons = [
         text: 'Enviar'
     })
 ];
+
+const feedback = setFeedback();
 
 const handleSubmit = event => {
     event.preventDefault();
@@ -57,7 +59,7 @@ const handleSubmit = event => {
     });
 }
 
-export default attributes => {  
+export default () => {  
     const form = createForm(fields, buttons);
     form.addEventListener('submit', handleSubmit);
 

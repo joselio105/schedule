@@ -65,7 +65,8 @@ const getMonthDaysClean = timeStampToday => {
             weekDay: date.getDay(),
             timestamp: data.timeStamp, 
             date: date.toDateString(),
-            currentMonth: true
+            currentMonth: true,
+            apiDate: `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
         });
         data.timeStamp += oneDay;
 
@@ -78,21 +79,22 @@ const getMonthDaysClean = timeStampToday => {
 export const getMonthDays = timeStampToday => {
     const dateObject = timeStampToday === null ? new Date() : new Date(timeStampToday);  
     const year = dateObject.getFullYear();
-    const month = dateObject.getMonth();
+    const month = dateObject.getMonth()+1;
     const days = [];
 
-    const newDateObject = new Date(`${month+1}-1-${year}`);
+    const newDateObject = new Date(`${year}/${month}/1`);
     const timeStamp = newDateObject.valueOf();
     const weekDay = newDateObject.getDay();
 
     for( let day=weekDay; day>0; day--){
         const lastMonthTimeStamp = timeStamp - (day * oneDay);
-        const dateObjectLastMonth = new Date(lastMonthTimeStamp);
+        const date = new Date(lastMonthTimeStamp);
         days.push({
-            day: dateObjectLastMonth.getDate(),
-            weekDay: dateObjectLastMonth.getDay(),
+            day: date.getDate(),
+            weekDay: date.getDay(),
             timestamp: lastMonthTimeStamp, 
-            date: dateObjectLastMonth.toDateString()
+            date: date.toDateString(),
+            apiDate: `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
         });
     }
 
@@ -101,12 +103,13 @@ export const getMonthDays = timeStampToday => {
     const lastDay = days[days.length - 1];
     for( let day=lastDay.weekDay; day<6; day++){
         const nextMonthTimeStamp = lastDay.timestamp + (5 - day) * oneDay;
-        const dateObjectNextMonth = new Date(nextMonthTimeStamp);
+        const date = new Date(nextMonthTimeStamp);
         days.push({
-            day: dateObjectNextMonth.getDate(),
-            weekDay: dateObjectNextMonth.getDay(),
+            day: date.getDate(),
+            weekDay: date.getDay(),
             timestamp: nextMonthTimeStamp, 
-            date: dateObjectNextMonth.toDateString()
+            date: date.toDateString(),
+            apiDate: `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
         });
     }
     const newLastDay = days[days.length - 1];
@@ -144,16 +147,9 @@ export const getCompleteDate = (timeStamp, day) => {
     return new Date(weekTimeStamps[day]).toDateString();
 }
 
-export const getEventDuration = (stop, start='07:00') => {
-    const startMinutes = convertToMinutes(start);
-    const stopMinutes = convertToMinutes(stop);
+export const getEventDuration = (stop, start='420') => {
 
-    return stopMinutes - startMinutes;
-}
-
-const convertToMinutes = time => {
-    const timeArray = time.split(':');
-    return parseInt(timeArray[0]) * 60 + parseInt(timeArray[1]);
+    return stop - start;
 }
 
 export const getUtilWeekDays = timeStamp => {
@@ -169,11 +165,11 @@ export const getUtilWeekDays = timeStamp => {
         const timeStamp = today + oneDay * (weekDay - weekDayToday);
         const dateObjectCurrent = new Date(timeStamp);
         
-        const daYString = dateObjectCurrent.getDate() < 10 ? `0${dateObject.getDate()}` : `${dateObject.getDate()}`;
-        const monthString = dateObjectCurrent.getMonth() < 10 ? `0${dateObject.getMonth()}` : `${dateObject.getMonth()}`;
+        const daYString = String(dateObjectCurrent.getDate()).padStart(2, '0');
+        const monthString = String(dateObjectCurrent.getMonth()+1).padStart(2, '0');
         
         const day = {
-            date: `${dateObjectCurrent.getFullYear()}/${monthString}/${daYString}`,
+            date: `${dateObjectCurrent.getFullYear()}-${monthString}-${daYString}`,
             day: dateObjectCurrent.getDate(),
             weekDay,
             timeStamp: dateObjectCurrent.valueOf(),
@@ -184,6 +180,13 @@ export const getUtilWeekDays = timeStamp => {
     }
     
     return response;
+}
+
+export const intToHoursString = value => {
+    const hours = Math.floor(value /60);
+    const minutes = value % 60;
+
+    return `${String(hours).padStart(2, '0')}h${String(minutes).padStart(2, '0')}`;
 }
 
 export const hours = [

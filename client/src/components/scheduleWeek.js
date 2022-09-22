@@ -7,14 +7,14 @@ const renderCalendar = (timeStamp=null) => {
     resetCalendarContainer(container);
 
     const calendar = createHtml('div', { class: "calendar-week" });
-    setCalendarHead(container, calendar, timeStamp);
+    setCalendarHead(calendar, timeStamp);
     setCalendarWeekDays(calendar, timeStamp);
     setCalendarContent(calendar, timeStamp);
     
     return calendar;
 }
 
-const setCalendarHead = (container, calendar, timeStamp) => {  
+const setCalendarHead = (calendar, timeStamp) => {  
     const weekTitle = getWeekTitle(timeStamp);
 
     const head = createHtml('head', { class: "calendar-head"});
@@ -95,7 +95,7 @@ const setCalendarWeekDays = (calendar, timeStamp) => {
     calendar.appendChild(weekDaysWrapper);
 }
 
-const setCalendarContent = (calendar, timeStamp) => {    
+const setCalendarContent = (calendar, timeStamp) => {  
     const contentWrapper = createHtml('div', { class: "content-wrapper" });
     const hoursLabelWrapper = createHtml('div', { classes: ['label-content'] });
     hours.forEach( hour => {
@@ -140,8 +140,10 @@ const resetCalendarContainer = container => {
     container.appendChild(children[1]);
 }
 
-const renderEvents = (container, day) => {
-    getEvents(day.timeStamp).forEach( event => {
+const renderEvents = async (container, day) => {
+    const events = await getEvents(day.date);
+    
+    events.forEach( event => {
         const eventTag = createHtml(
             'button', {
                 text: event.title,
