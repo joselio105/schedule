@@ -1,9 +1,9 @@
-import createElement from "../render/HtmlElement.js";
-import { get } from "../api/server.js";
-import createPagination from "../components/Pagination.js";
-import createPageHeader from "../components/PageHeader.js";
-import createButtonsWrapper from "../components/ButtonsWrapper.js";
-import createCardFooter from "../components/ElementFooter.js";
+import createElement from "../../render/HtmlElement.js";
+import { get } from "../../api/server.js";
+import createPagination from "../../components/Pagination.js";
+import createPageHeader from "../../components/PageHeader.js";
+import createButtonsWrapper from "../../components/ButtonsWrapper.js";
+import createCardFooter from "../../components/ElementFooter.js";
 
 export default async attributes => {
 

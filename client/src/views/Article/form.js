@@ -1,8 +1,8 @@
-import createElement from "../render/HtmlElement.js";
-import createFom from "../components/Form.js";
-import setFeedback, { setFeedbackMessage } from "../components/Feedback.js";
-import FormBlockInput from "../components/FormBlockInput.js";
-import { renderRoute } from "../routes/management.js";
+import createElement from "../../render/HtmlElement.js";
+import createFom from "../../components/Form.js";
+import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
+import FormBlockInput from "../../components/FormBlockInput.js";
+import { renderRoute } from "../../routes/management.js";
 
 export default async attributes => {
     let article = {};

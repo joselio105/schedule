@@ -1,10 +1,10 @@
-import createElement from "../render/HtmlElement.js";
-import createFom from "../components/Form.js";
-import FormBlockInput from "../components/FormBlockInput.js";
-import FormBlockSelect from "../components/FormBlockSelect.js";
-import { get, post, put } from "../api/server.js";
-import { renderRoute } from "../routes/management.js";
-import setFeedback, { setFeedbackMessage } from "../components/Feedback.js";
+import createElement from "../../render/HtmlElement.js";
+import createFom from "../../components/Form.js";
+import FormBlockInput from "../../components/FormBlockInput.js";
+import FormBlockSelect from "../../components/FormBlockSelect.js";
+import { get, post, put } from "../../api/server.js";
+import { renderRoute } from "../../routes/management.js";
+import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
 
 export default async attributes => {
     let user = {};

@@ -1,12 +1,12 @@
-import { getEvent } from "../api/events.js";
-import setFeedback, { setFeedbackMessage } from "../components/Feedback.js";
-import createHtml, { setSelectBlock } from "../render/HtmlElement.js";
-import createForm from "../components/Form.js";
-import createFormField from "../components/FormBlockInput";
-import createFormSelect from "../components/FormBlockSelect";
-import { renderRoute } from "../routes/management.js";
-import { intToHoursString } from "../tools/Date.js";
-import { put } from "../api/server.js";
+import { getEvent } from "../../api/events.js";
+import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
+import createHtml from "../../render/HtmlElement.js";
+import createForm from "../../components/Form.js";
+import createFormField from "../../components/FormBlockInput";
+import createFormSelect from "../../components/FormBlockSelect";
+import { renderRoute } from "../../routes/management.js";
+import { hoursStringToInt, intToHoursString } from "../../tools/Date.js";
+import { post, put } from "../../api/server.js";
 
 export default async attributes => {
     const { type } = attributes;
@@ -50,11 +50,12 @@ const setFields = event => {
         ),
         createFormField(
             "description",
-            "Descrição (opcional)",
+            "Descrição",
             {
                 placeholder: "Digite a descrição do agendamento",
                 class: "description",
-                value: event.title ?  event.description : ''
+                value: event.title ?  event.description : '',
+                required: true
             }
         ), 
         getScheduleFields(event),       
@@ -83,6 +84,8 @@ const getScheduleFields = event => {
             {
                 required: true,
                 type: "time",
+                min: '07:00',
+                max: '20:59',
                 value: event.start ?  intToHoursString(event.start).replace('h', ':') : ''
             }
         ),
@@ -92,6 +95,8 @@ const getScheduleFields = event => {
             {
                 required: true,
                 type: "time",
+                min: '07:00',
+                max: '20:59',
                 value: event.stop ?  intToHoursString(event.stop).replace('h', ':') : ''
             }
         ),
@@ -109,13 +114,13 @@ const getRepeatFields = event => {
 
     const fields = [
         setCheckBox(),
-        createFormField('repaetTimes', "Quantidade de repetições", {
+        createFormField('repeatTimes', "Quantidade de repetições", {
             type: "number",
             step: 1, 
-            min: 1,
-            value: 1
+            min: 0,
+            placeholder: "Quantas vezes este evento deve se repetir?"
         }),
-        createFormSelect('repeatFrequency', "Frequência", 
+        createFormSelect('repeatType', "Frequência", 
         {
             "Diário": "day",
             "Semanal": "week",
@@ -168,7 +173,7 @@ const setButtons = (event, type) => {
             class: 'back',
             text: 'voltar',
             id: 'schedule',
-            value: type ? type : 'month'
+            value: type
         }),
         createHtml('button', { 
             type: 'submit', 
@@ -179,7 +184,6 @@ const setButtons = (event, type) => {
     ];
 
     buttons[0].addEventListener('click', handleBack);
-    // buttons[1].addEventListener('click', handleSubmit);
 
     return buttons;
 }
@@ -193,8 +197,37 @@ const handleBack = event => {
 
 const handleSubmit = async (event, id) => {
     event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const startValue = hoursStringToInt(form.get('start'));
+    const stopValue = hoursStringToInt(form.get('stop'));
+    form.set('start', startValue);
+    form.set('stop', stopValue);
 
-    const result = await put('schedules', event.currentTarget, id);
+    if(id){
+        const result = await put(
+            'schedules', 
+            form, 
+            {
+                name: 'id',
+                value: parseInt(id)
+            }
+        );
+        
+        if(result.hasOwnProperty('error')){
+            setFeedbackMessage(result.error);
+        }else{
+            renderRoute('schedule', result);
+        }
+    }else{
+        const result = await post(
+            'schedules',
+            form
+        );
 
-    console.log(result)
+        if(result.hasOwnProperty('error')){
+            setFeedbackMessage(result.error);
+        }else{
+            renderRoute('schedule', result);
+        }        
+    }    
 }

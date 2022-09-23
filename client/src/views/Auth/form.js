@@ -1,10 +1,10 @@
-import createElement from "../render/HtmlElement.js";
-import createForm from "../components/Form.js"
-import FormBlockInput from "../components/FormBlockInput.js";
-import { defaultView, renderRoute } from "../routes/management.js";
-import { get, post } from "../api/server.js";
-import { isAuthenticated, logout, saveAuth, saveUser } from "../tools/Auth.js";
-import setFeedback, { setFeedbackMessage } from "../components/Feedback.js";
+import createElement from "../../render/HtmlElement.js";
+import createForm from "../../components/Form.js"
+import FormBlockInput from "../../components/FormBlockInput.js";
+import { defaultView, renderRoute } from "../../routes/management.js";
+import { get, post } from "../../api/server.js";
+import { isAuthenticated, logout, saveAuth, saveUser } from "../../tools/Auth.js";
+import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
 
 const fields = [
     FormBlockInput('email', 'Email', {
@@ -34,8 +34,9 @@ const handleSubmit = event => {
     if(isAuthenticated()){
         logout();
     }
+    const formData = new FormData(event.target);
     
-    post('auth', event.target)
+    post('auth', formData)
     .then(response => {
         if(response.error){
             feedback.classList.remove('hiden');

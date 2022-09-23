@@ -1,7 +1,7 @@
-import { getEvent } from "../api/events.js";
-import createHtml from "../render/HtmlElement.js"
-import { renderRoute } from "../routes/management.js";
-import { getMonth, intToHoursString, months } from "../tools/Date.js";
+import { getEvent } from "../../api/events.js";
+import createHtml from "../../render/HtmlElement.js"
+import { renderRoute } from "../../routes/management.js";
+import { intToHoursString, months } from "../../tools/Date.js";
 
 export default async attributes => {
     const event = await getEvent(parseInt(attributes.id));
@@ -27,8 +27,8 @@ const setDescription = event => {
 
 const setSchedule = event => {
     const [year, month, day] = event.day.split('-');
-    const dateObject = new Date(`${event.day} ${event.start}`);
-    const dateObjectStop = new Date(`${event.day} ${event.stop}`);
+    // const dateObject = new Date(`${event.day} ${event.start}`);
+    // const dateObjectStop = new Date(`${event.day} ${event.stop}`);
     const monthString = months[parseInt(month)-1];
     const scheduleContainer = createHtml('div', { class: "schedule-info" });
     
@@ -57,6 +57,8 @@ const setSchedule = event => {
 
 const setButtons = (event, attributes) => {
     const buttonsWrapper = createHtml('nav', { class: "commands" });
+    event.viewType = attributes.type;
+
     const buttons = [
         createHtml('button', {
             id: "button-back",
@@ -73,7 +75,7 @@ const setButtons = (event, attributes) => {
         createHtml('button', {
             id: "button-delete",
             classes: ["button", "delete"],
-            value: event.id,
+            value: JSON.stringify(event),
             text: "Excluir"
         })
     ];
@@ -102,4 +104,12 @@ const updateHandler = event => {
     renderRoute("scheduleForm", {id: event.currentTarget.value});
 }
 
-const deleteHandler = event => {}
+const deleteHandler = event => {
+    const schedule = JSON.parse(event.currentTarget.value);
+    renderRoute(
+        "scheduleDelete", 
+        {
+            event: schedule
+        }
+        )
+}

@@ -189,6 +189,12 @@ export const intToHoursString = value => {
     return `${String(hours).padStart(2, '0')}h${String(minutes).padStart(2, '0')}`;
 }
 
+export const hoursStringToInt = hoursString => {
+    const [ hours, minutes ] = hoursString.split(':');
+
+    return parseInt(hours) * 60 + parseInt(minutes);
+}
+
 export const hours = [
     '07:00',
     '08:00',

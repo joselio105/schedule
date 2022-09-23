@@ -1,12 +1,21 @@
 import { getToken, getUser } from "../tools/Auth.js";
+import { hoursStringToInt } from "../tools/Date.js";
+
+export const host = 'http://localhost/arqAdmin/server/?';
 
 const getResponse = async (controller, init) => {
-    const url = 'http://localhost/arqAdmin/server/?';
-    
-    const request = new Request(`${url}${controller}`, init);
-    const response = await fetch(request).then(resp=>resp);
 
-    return response;
+    const request = new Request(
+        `${host}${controller}`, 
+        init
+    );
+
+    const result = await fetch(request)
+        .then(response => response.json())
+        .then(responseJson=>responseJson)
+        .catch(error => {console.log(error)})
+        
+    return result;
 }
 
 export const get = async (controller, params={}) => {
@@ -28,51 +37,84 @@ export const get = async (controller, params={}) => {
 }
 
 export const post = async (controller, form) => {
-    const response = await getResponse(controller, {
-        method: 'POST',
-        body: getFormObject(form),
-        headers: new Headers({
-            'Authorization': 'Bearer ' + getToken()
-        })
+    const body = getFormObject(form);
+
+    const headers = new Headers({
+        // 'Content-Type': 'application/json',
+        // 'Content-Length': body.length.toString(),
+        // 'X-Custom-Header': 'ProcessThisImmediately',
+        'Authorization': 'Bearer ' + getToken()
     });
 
-    return response;
+    return await getResponse(controller, {
+        method: 'POST',
+        body,
+        headers
+    });
 }
 
 export const put = async (controller, form, objectId) => {
+    const body = getFormJson(form, objectId);
+
+    const headers = new Headers({
+        'Content-Type': 'application/json',
+        'Content-Length': body.length.toString(),
+        'X-Custom-Header': 'ProcessThisImmediately',
+        'Authorization': 'Bearer ' + getToken()
+    });
+
     const response = await getResponse(controller, {
         method: 'PUT',
-        body: getFormJson(form, objectId),
-        headers: new Headers({
-            'Authorization': 'Bearer ' + getToken()
-        })
+        body,
+        headers
     });
 
     return response;
 }
 
-export const erase = async () => {}
+export const erase = async (controlerUrl, idObject, attributes={}) => {
+    const headers = new Headers({
+        // 'Content-Type': 'application/json',
+        // 'Content-Length': body.length.toString(),
+        // 'X-Custom-Header': 'ProcessThisImmediately',
+        'Authorization': 'Bearer ' + getToken()
+    });
 
-const getFormObject = form => {
-    const formData = new FormData(form);
+    const controlerInit = `${controlerUrl}&${idObject.name}=${idObject.value}`;
+    const complement = [];
+    Object.keys(attributes).forEach(key=>complement.push(`${key}=${attributes[key]}`));
+
+    const controler = complement.length > 0 
+        ? controlerInit + '&' + complement.join('&') 
+        : controlerInit;
+        
+    return await getResponse(
+        controler,
+        {
+            method: 'DELETE',
+            headers
+        }
+    )
+}
+
+const getFormObject = formData => {
     const userLogged = getUser();
 
     if(userLogged){
-        formData.set('user_id', userLogged.id);    }
-    
+        formData.set('user_id', userLogged.id);    
+    }
     
     return formData;
 }
 
-const getFormJson = (form, id) => {
-    const body =  { id };
-
-    const formData = new FormData(form);
-    for (const key of formData.keys()) {
-        body[key] = formData.get(key)
-    }
-    body.user_id = getUser().id;
+const getFormJson = (formData, objectId) => {
+    const body =  {};
+    body[objectId.name] = objectId.value;
     
+    for (const key of formData.keys()) {
+        body[key] = formData.get(key);
+        
+    }
 
     return JSON.stringify(body);
 }
