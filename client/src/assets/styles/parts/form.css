@@ -1,3 +1,29 @@
+#container .content-page .hidden{
+    display: none;
+}
+
+#container .content-page .feedback-message{
+    max-width: 50rem;
+    border-radius: .8rem;
+    margin: .8rem auto;
+    padding: 1.2rem;
+    background: var(--color-error);
+    color: var(--color-text-on-error)
+}
+
+#container .content-page .timer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .2rem;
+    padding: 1.2rem;
+    background: var(--color-primary);
+}
+
+#container .content-page .timer time{
+    font-weight: 700;
+}
+
 #container .content-page form{
     width: 100%;
     display: flex;
@@ -21,6 +47,7 @@
 }
 
 #container .content-page form .input-block label,
+#container .content-page form .password-block label,
 #container .content-page .commands .select-block label{
     position: absolute;
     top: -1rem;
@@ -34,6 +61,7 @@
 }
 
 #container .content-page form .input-block input,
+#container .content-page form .password-block input,
 #container .content-page form .input-block select,
 #container .content-page .commands .select-block select{
     width: 100%;
@@ -46,6 +74,47 @@
 
 #container .content-page .commands .select-block{
     max-width: 30%;
+}
+
+#container .content-page form .password-block{
+    position: relative;
+    width: 100%;
+    min-height: 4rem;
+    border: 1px solid var(--color-primary);
+    background: var(--color-primary-light);
+    padding: 1rem;
+    border-radius: 1rem;
+    display: grid;
+    gap: 1.2rem;
+    grid-template-areas: 
+        "label label"
+        "input button"
+        "feedback feedback";
+}
+
+#container .content-page form .password-block label{
+    grid-area: label;
+    top: -2.4rem;
+}
+
+#container .content-page form .password-block input{
+    grid-area: input;
+}
+
+#container .content-page form .password-block span{
+    grid-area: feedback;
+    position: absolute;
+}
+
+#container .content-page form .password-block button{
+    grid-area: button;
+    background: var(--color-primary);
+    color: var(--color-text-on-primay);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .4rem;
+    border: none;
 }
 
 #container .content-page form .form-buttons-wrapper{

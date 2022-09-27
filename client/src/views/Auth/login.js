@@ -21,13 +21,20 @@ const fields = [
 
 const buttons = [
     createElement('button', {
+        text: '(re)Cadastrar senha'
+    }),
+    createElement('button', {
         type: 'submit',
         class: 'submit',
-        text: 'Enviar'
+        text: 'Fazer login'
     })
 ];
 
 const feedback = setFeedback();
+
+buttons[0].addEventListener('click', event=>{
+    renderRoute('askPassword');
+})
 
 const handleSubmit = event => {
     event.preventDefault();

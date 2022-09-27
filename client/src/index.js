@@ -1,8 +1,29 @@
 import navAction from "./tools/NavMain.js";
-import routing from "./routes/management.js"
-
+import routing, { renderRoute } from "./routes/management.js"
 
 window.addEventListener('load', async ()=>{
     navAction();
-    await routing();
+    
+    const params = getparams();
+    if(params.hasOwnProperty('token')){
+        renderRoute(
+            'password',
+            JSON.parse(atob(params.token))
+        );
+    }else{
+        await routing();
+    }  
+    
 })
+
+const getparams = () => {
+    const queryString = location.search;
+    const params = {};
+
+    queryString.split('&').forEach(clauses => {
+        const [ key, value ] = clauses.split('=');
+        params[key] = value;
+    })
+
+    return params;
+}

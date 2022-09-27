@@ -17,6 +17,10 @@ const createHtml = (tag, params={}) => {
     return element;
 }
 
+export const createTextNode = text => {
+    return document.createTextNode(text);
+}
+
 export const createButton = ( buttonAttrs, iconAttrs=null ) => {
     const button = createHtml('button', buttonAttrs);
 
