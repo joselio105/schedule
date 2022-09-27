@@ -9,11 +9,10 @@ const getResponse = async (controller, init) => {
         `${host}${controller}`, 
         init
     );
-
+    
     const result = await fetch(request)
-        .then(response => response.json())
-        .then(responseJson=>responseJson)
-        .catch(error => {console.log(error)})
+        .then(response => (response.json()))
+        .then(responseJson => (responseJson))
         
     return result;
 }
@@ -72,6 +71,25 @@ export const put = async (controller, form, objectId) => {
     return response;
 }
 
+export const patch = async (controller, form, objectId) => {
+    const body = getFormJson(form, objectId);
+
+    const headers = new Headers({
+        'Content-Type': 'application/json',
+        'Content-Length': body.length.toString(),
+        'X-Custom-Header': 'ProcessThisImmediately',
+        'Authorization': 'Bearer ' + getToken()
+    });
+
+    const response = await getResponse(controller, {
+        method: 'PTCH',
+        body,
+        headers
+    });
+
+    return response;
+}
+
 export const erase = async (controlerUrl, idObject, attributes={}) => {
     const headers = new Headers({
         // 'Content-Type': 'application/json',
@@ -109,7 +127,10 @@ const getFormObject = formData => {
 
 const getFormJson = (formData, objectId) => {
     const body =  {};
-    body[objectId.name] = objectId.value;
+
+    if(objectId != null){
+        body[objectId.name] = objectId.value;
+    }
     
     for (const key of formData.keys()) {
         body[key] = formData.get(key);

@@ -1,5 +1,5 @@
 import { get } from "./server.js";
-import { getMonthDays } from "../tools/Date";
+import { getMonthDays } from "../tools/Date.js";
 
 export default async date => {
     const events = await getMonthEvents(date);

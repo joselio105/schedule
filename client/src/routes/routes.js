@@ -1,4 +1,6 @@
-import login from "../views/Auth/form.js";
+import login from "../views/Auth/login.js";
+import password from "../views/Auth/password.js";
+import askPassword from "../views/Auth/askPassword.js";
 import notFound from "../views/NotFound.js";
 import articles from "../views/Article/index.js";
 import articleForm from "../views/Article/form.js";
@@ -19,6 +21,8 @@ export default {
     users,
     userForm,
     login,
+    password,
+    askPassword,
     notFound
 }
 
