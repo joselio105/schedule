@@ -20,6 +20,12 @@
     background: var(--color-primary);
 }
 
+#container .content-page .timer.gone{
+    color: var(--color-error);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
 #container .content-page .timer time{
     font-weight: 700;
 }
@@ -65,7 +71,7 @@
 #container .content-page form .input-block select,
 #container .content-page .commands .select-block select{
     width: 100%;
-    border: none;
+    border: 1px solid transparent;
     background: transparent;
     padding: .5rem;
     outline-color: var(--color-primary-dark);
@@ -101,9 +107,12 @@
     grid-area: input;
 }
 
-#container .content-page form .password-block span{
+#container .content-page form .password-block ul{
     grid-area: feedback;
     position: absolute;
+    background: var(--color-background);
+    font-size: .8rem;
+    z-index: 10;
 }
 
 #container .content-page form .password-block button{
@@ -115,6 +124,39 @@
     align-items: center;
     border-radius: .4rem;
     border: none;
+}
+
+#container .content-page form .password-block input.unvalid{
+    border-color: var(--color-error);
+    outline-color: var(--color-error);
+}
+
+#container .content-page form .password-block ul.hidden{
+    display: none;
+}
+
+#container .content-page form .password-block ul li{
+    display: flex;
+    align-items: center;
+}
+
+#container .content-page form .password-block ul .valid{
+    color: var(--color-text-on-primay);
+}
+
+#container .content-page form .password-block ul .valid::before{
+    content: url('../../images/icons/check_green.svg');
+    margin-right: .8rem;
+}
+
+#container .content-page form .password-block ul .unvalid{
+    color: var(--color-text-on-background-light);
+    text-decoration: line-through;
+}
+
+#container .content-page form .password-block ul .unvalid::before{
+    content: url('../../images/icons/x_red.svg');
+    margin-right: .8rem;
 }
 
 #container .content-page form .form-buttons-wrapper{

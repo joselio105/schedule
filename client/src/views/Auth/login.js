@@ -3,7 +3,7 @@ import createForm from "../../components/Form.js"
 import FormBlockInput from "../../components/FormBlockInput.js";
 import { defaultView, renderRoute } from "../../routes/management.js";
 import { get, post } from "../../api/server.js";
-import { isAuthenticated, logout, saveAuth, saveUser } from "../../tools/Auth.js";
+import { getAuth, getUser, isAuthenticated, logout, saveAuth, saveUser } from "../../tools/Auth.js";
 import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
 
 const fields = [
@@ -36,38 +36,39 @@ buttons[0].addEventListener('click', event=>{
     renderRoute('askPassword');
 })
 
-const handleSubmit = event => {
+const handleSubmit = async event => {
     event.preventDefault();
     if(isAuthenticated()){
         logout();
     }
     const formData = new FormData(event.target);
     
-    post('auth', formData)
-    .then(response => {
-        if(response.error){
-            feedback.classList.remove('hiden');
-            feedback.textContent = response.error;
-        }else{
-            if(response.token){
-                saveAuth(response);
-                get('auth')
-                .then(response => {
-                    if(response.error){
-                        setFeedbackMessage(response.error);
-                    }else{
-                        saveUser(response);
-                        renderRoute(defaultView);
-                    }
-                }).catch(response => {
-                    setFeedbackMessage(response.error);
-                });
+    const response = await post('auth', formData);
+
+    if(response.error){
+        setFeedbackMessage(response.error);
+    }else{
+        if(response.token){
+            saveAuth(response);
+            const user = await get('auth');
+            
+            if(user.error){
+                setFeedbackMessage(response.error);
+            }else{
+                saveUser(user);
+                renderRoute(defaultView);
             }
+        }else{
+            setFeedbackMessage("");
         }
-    });
+    }
 }
 
 export default () => {  
+    console.log(
+        getAuth(),
+        getUser()
+    )
     const form = createForm(fields, buttons);
     form.addEventListener('submit', handleSubmit);
 

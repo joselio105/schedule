@@ -8,7 +8,9 @@ window.addEventListener('load', async ()=>{
     if(params.hasOwnProperty('token')){
         renderRoute(
             'password',
-            JSON.parse(atob(params.token))
+            {
+                token: params.token
+            }
         );
     }else{
         await routing();

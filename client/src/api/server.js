@@ -82,7 +82,7 @@ export const patch = async (controller, form, objectId) => {
     });
 
     const response = await getResponse(controller, {
-        method: 'PTCH',
+        method: 'PATCH',
         body,
         headers
     });

@@ -1,7 +1,8 @@
+import { patch } from "../../api/server.js";
 import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
 import createForm from "../../components/Form.js"
 import FormBlockInput from "../../components/FormBlockInput.js";
-import FormBlockInputPassword from "../../components/FormBlockInputPassword.js";
+import FormBlockInputPassword, { passwordIsValid } from "../../components/FormBlockInputPassword.js";
 import createElement, { createTextNode } from "../../render/HtmlElement.js";
 import { renderRoute } from "../../routes/management.js";
 
@@ -9,6 +10,11 @@ const fields = [
     FormBlockInputPassword('password', 'Digite sua nova senha', {
         placeholder: "Digite sua nova senha",
         autocomplete: "new-password"
+    }),
+    createElement('input', {
+        type: "hidden",
+        name: "token",
+        id: "token"
     })
 ];
 
@@ -23,19 +29,28 @@ const buttons = [
     })
 ];
 
+const getUser = token => JSON.parse(atob(token));
+
 export default attributes => {
+    const { token } = attributes;
+    const user = getUser(token);
+
     const form = createForm(fields, buttons);
+    fields[1].value=token;
+
     form.addEventListener('submit', handleSubmit);
 
-    const { minutes, seconds } = getTime(attributes.expiration);
+    const { minutes, seconds } = getTime(user.expiration);
     const timer = createTimer(minutes, seconds);
+    
+    if(timer.children.length > 0){
+        setInterval(() => {
+            const { minutes, seconds } = getTime(user.expiration);  
 
-    console.log(timer.children[0].textContent)
-    setInterval(() => {
-        const { minutes, seconds } = getTime(attributes.expiration);
-        timer.children[0].textContent = minutes
-        timer.children[1].textContent = seconds
-    }, 1000);
+            timer.children[0].textContent = minutes;
+            timer.children[1].textContent = seconds;
+        }, 1000);
+    }
     return [
         createElement('h2', { text: '(re)Cadastre sua senha' }),
         timer,
@@ -48,10 +63,24 @@ buttons[0].addEventListener('click', event=>{
     renderRoute('askPassword');
 })
 
-const handleSubmit = event => {
+const handleSubmit = async event => {
     event.preventDefault();
 
-    //PATCH
+    if(passwordIsValid()){
+        const form = new FormData(event.currentTarget);
+        const { id } = getUser(form.get('token'));
+
+        const result = await patch('password', form, {
+            name: 'id',
+            value: id
+        })
+
+        if(result.error){
+            setFeedbackMessage(result.error);
+        }else{
+            renderRoute('login');
+        }
+    }
 }
 
 const createTimer = (minutes, seconds) => {
