@@ -18,9 +18,8 @@ export const getAuth = () => {
 
 export const getUser = () => {
     const response = localStorage.getItem(userKey);
-    if(response){
-        return JSON.parse(response);
-    }
+    
+    return JSON.parse(response) || false;
 }
 
 export const getToken = () => {

@@ -15,7 +15,7 @@ const handleClick = event => {
             renderRoute('login');
         },
         userView: () => {
-            console.log('Não implementado');
+            renderRoute('userView', {userId: getUser['id']});
         }
     };
 
@@ -30,7 +30,7 @@ const createMenu = () => {
 
 const restoreMenu = () => {    
     navAuth.innerHTML = '';
-    const buttonLogin = createElement('a', {
+    const buttonLogin = createElement('button', {
         href: "login",
         'classes': ["login", "route"]
     });
@@ -40,6 +40,8 @@ const restoreMenu = () => {
 
     buttonLogin.appendChild(image);
     navAuth.appendChild(buttonLogin);
+
+    buttonLogin.addEventListener('click', ()=>renderRoute('login'));
 }
 
 const getTitle = () => {
@@ -55,17 +57,19 @@ const getNav = () => {
         {
             text: 'Perfil',
             id: 'userView',
+            classes: ['route']
         },     
         {
             text: 'Logout',
-            id: 'exit'
+            id: 'exit',
+            classes: ['route']
         }
     ];
 
     const list = createElement('ul', {class: 'auth-list'});
     itens.forEach(item => {
         const listItem = createElement('li');
-        const listLink = createElement('a', item);
+        const listLink = createElement('button', item);
         
         listLink.addEventListener('click', handleClick);
 

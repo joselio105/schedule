@@ -2,27 +2,17 @@ import routes, { protectedRoutes } from "./routes.js";
 import render from "../tools/Render.js";
 import { isAuthenticated } from "../tools/Auth.js";
 import NavAuth from "../tools/NavAuth.js";
+import { renderNav } from "../tools/NavMain.js";
 
 const attribute = {};
 
 export const defaultView = "schedule";
 
 export default async () => {
-    const links = document.getElementsByClassName('route');
 
     NavAuth();
+    renderNav();
     await render(routes[defaultView]);
-
-    for(const link of links){
-        link.addEventListener('click', event => {
-            event.preventDefault();
-        
-            const viewNames = link.href.split('/');
-            const viewName = viewNames[viewNames.length-1];
-
-            renderRoute(viewName);
-        })
-    }   
 }
 
 const autenticate = route => {
@@ -38,5 +28,6 @@ export const renderRoute = (viewname, attributes = {}) => {
     const routeToRender = (protectedRoutes.hasOwnProperty(viewname) ? autenticate(route) : route);
     
     NavAuth();
+    renderNav();
     render(routeToRender, attributes);
 }
