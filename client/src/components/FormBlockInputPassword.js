@@ -23,11 +23,12 @@ const requiriments = [
     },
 ];
 
-const feedback = creteElement('ul', { classes: ['feedback', 'hidden']});
-
 const buttonView = creteElement('button', {
-        text: "Visualizar Senha"
+        text: "Visualizar Senha",
+        id: "view-password"
     });
+
+const feedback = creteElement('ul', { classes: ['feedback', 'hidden']});
     
 const results = [];
 
@@ -59,14 +60,16 @@ const handleValidate = event => {
     }
 }
 
-export default (fieldName, labelText, inputAttrs={}) => {
+export default (fieldName, labelText, inputAttrs={}, toCreate=true) => {
     const container = creteElement('div', {class: 'password-block'});
+
     const label = creteElement('label', {for: fieldName, text:labelText});
     const input = creteElement('input', {
         id: fieldName,
         name: fieldName,
         type: 'password',
         autocomplete: 'new-password',
+        required: true,
         ...inputAttrs
     });
 
@@ -77,12 +80,14 @@ export default (fieldName, labelText, inputAttrs={}) => {
         input.setAttribute('type', "password");
     });
 
-    input.addEventListener('keyup', handleValidate);
-
     container.appendChild(label);
-    container.appendChild(input);
-    container.appendChild(feedback);
     container.appendChild(buttonView);
+    container.appendChild(input);
 
+    if(toCreate){
+        input.addEventListener('keyup', handleValidate);
+        container.appendChild(feedback);
+    }
+    
     return container;
 }

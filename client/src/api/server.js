@@ -1,6 +1,7 @@
 import { getToken, getUser } from "../tools/Auth.js";
 import { hoursStringToInt } from "../tools/Date.js";
 
+// export const host = 'https://arq.ufsc.br/api/?';
 export const host = 'http://localhost/arqAdmin/server/?';
 
 const getResponse = async (controller, init) => {

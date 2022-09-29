@@ -1,15 +1,13 @@
 import { patch } from "../../api/server.js";
-import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
-import createForm from "../../components/Form.js"
-import FormBlockInput from "../../components/FormBlockInput.js";
-import FormBlockInputPassword, { passwordIsValid } from "../../components/FormBlockInputPassword.js";
-import createElement, { createTextNode } from "../../render/HtmlElement.js";
 import { renderRoute } from "../../routes/management.js";
+import createElement, { createTextNode } from "../../render/HtmlElement.js";
+import createForm from "../../components/Form.js";
+import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
+import FormBlockInputPassword, { passwordIsValid } from "../../components/FormBlockInputPassword.js";
 
 const fields = [
     FormBlockInputPassword('password', 'Digite sua nova senha', {
-        placeholder: "Digite sua nova senha",
-        autocomplete: "new-password"
+        placeholder: "Digite sua nova senha"
     }),
     createElement('input', {
         type: "hidden",
@@ -78,7 +76,7 @@ const handleSubmit = async event => {
         if(result.error){
             setFeedbackMessage(result.error);
         }else{
-            renderRoute('login');
+            renderRoute('login', { message: result});
         }
     }
 }

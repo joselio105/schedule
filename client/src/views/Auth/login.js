@@ -1,23 +1,11 @@
 import createElement from "../../render/HtmlElement.js";
 import createForm from "../../components/Form.js"
+import FormBlockInputPassword from "../../components/FormBlockInputPassword.js";
 import FormBlockInput from "../../components/FormBlockInput.js";
 import { defaultView, renderRoute } from "../../routes/management.js";
 import { get, post } from "../../api/server.js";
-import { getAuth, getUser, isAuthenticated, logout, saveAuth, saveUser } from "../../tools/Auth.js";
+import { isAuthenticated, logout, saveAuth, saveUser } from "../../tools/Auth.js";
 import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
-
-const fields = [
-    FormBlockInput('email', 'Email', {
-        placeholder: 'Digite seu Email',
-        type: 'email',
-        required: true
-    }),
-    FormBlockInput('password', 'Senha', {
-        type: 'password',
-        placeholder: 'Digite sua senha',
-        required: true
-    })
-];
 
 const buttons = [
     createElement('button', {
@@ -29,8 +17,6 @@ const buttons = [
         text: 'Fazer login'
     })
 ];
-
-const feedback = setFeedback();
 
 buttons[0].addEventListener('click', event=>{
     renderRoute('askPassword');
@@ -64,12 +50,21 @@ const handleSubmit = async event => {
     }
 }
 
-export default () => {  
-    console.log(
-        getAuth(),
-        getUser()
-    )
-    const form = createForm(fields, buttons);
+export default attributes => {  
+    if(attributes.message){
+        setFeedbackMessage('Senha alterada com sucesso');
+    }
+    
+    const form = createForm([
+        FormBlockInput('email', 'Email', {
+            placeholder: 'Digite seu Email',
+            type: 'email',
+            required: true
+        }),
+        FormBlockInputPassword('password', 'Digite sua senha', {
+            placeholder: "Digite sua senha"
+        }, false),
+    ], buttons);
     form.addEventListener('submit', handleSubmit);
 
     const response = [
