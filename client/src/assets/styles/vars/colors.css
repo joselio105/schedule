@@ -1,10 +1,10 @@
 :root{
-	--gray: #cccccc;
+	--gray: #dcdcdc;
 	--gray_dark: #a6a6a6;
 	--gray_darker: #737373;
 	--gray_light: #eff0f2;
 	--gray_lighter: #f9f6f9;
-	--gray-transparent: rgba(220, 220, 220, .3);
+	--gray-transparent: rgba(220, 220, 220, .8);
 	--black: #000000;
 	--green_oil: #999900;
 	--white: #ffffff;

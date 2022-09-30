@@ -1,7 +1,7 @@
 import createHtml, { createButton } from "../render/HtmlElement.js";
 import { weekDays, getWeekTitle, oneDay, getStringDay, getCompleteDate, getWeekDay, getMonth, getMonthDays, getMonthInfo } from "../tools/Date.js";
-import getEvents from "../api/events.js";
 import { renderRoute } from "../routes/management.js";
+import { get } from "../api/server.js";
 
 const renderCalendar = (timeStamp=null) => {
     resetCalendarContainer(container);
@@ -76,9 +76,15 @@ const setCalendarWeekDays = (calendar, timeStamp) => {
     calendar.appendChild(weekDaysWrapper);
 }
 
-const setCalendarContent = (calendar, timeStamp) => {    
+const setCalendarContent = async (calendar, timeStamp) => {    
     const contentWrapper = createHtml('div', { class: "content-month-wrapper" });
-    getMonthDays(timeStamp).forEach( date => {
+    
+    const monthDays = getMonthDays(timeStamp); 
+    const events = await get('schedules', {
+        from: monthDays[0].apiDate,
+        to: monthDays[monthDays.length - 1].apiDate
+    });
+    monthDays.forEach( date => {
         const day = createHtml('button', {
             class: 'day-content'
         });
@@ -97,29 +103,30 @@ const setCalendarContent = (calendar, timeStamp) => {
 
         day.appendChild(time);
         
-        renderEvents(day, date);
+        renderEvents(day, date, events);
         contentWrapper.appendChild(day)
     })
 
     calendar.appendChild(contentWrapper);
 }
 
-const renderEvents = async (container, day) => {
-    const events = await getEvents(day.apiDate);
+const renderEvents = async (container, day, events) => {
     events.forEach( event => {
-        const eventTag = createHtml(
-            'button', {
-                text: event.title,
-                id: event.id,
-                classes: [
-                    'schedule-event'
-                ]
-            }
-        );
+        if(day.apiDate === event.day){
+            const eventTag = createHtml(
+                'button', {
+                    text: event.title,
+                    id: event.id,
+                    classes: [
+                        'schedule-event'
+                    ]
+                }
+            );
 
-        eventTag.addEventListener('click', createClickHandler);
+            eventTag.addEventListener('click', createClickHandler);
 
-        container.appendChild(eventTag);
+            container.appendChild(eventTag);
+        }
     })
 }
 

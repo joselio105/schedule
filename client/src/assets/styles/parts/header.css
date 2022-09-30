@@ -1,7 +1,10 @@
 #container > header{
     z-index: 10;
     width: 100%;
-    background: rgba(200, 200, 200, .5) left center;
+    background-image: url('../../images/background.png');
+    background-color: transparent;
+    background-repeat: repeat-x;
+    background-position: left center;
     margin-bottom: 2.5rem;
 }
 
@@ -26,15 +29,10 @@
     gap: 1rem;
 }
 
-#container header .inner #main-nav .route,
-#container header .inner .commands .auth-nav .route{
+#container header .inner #main-nav .route{
     border: none;
     background: transparent;
     transition: transform .5s;
-}
-
-#container header .inner .commands .auth-nav .route:hover{
-    transform: scale(1.2);
 }
 
 #container header .inner h1{

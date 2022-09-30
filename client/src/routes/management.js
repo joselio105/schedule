@@ -11,7 +11,7 @@ export const defaultView = "schedule";
 export default async () => {
 
     NavAuth();
-    renderNav();
+    renderNav(defaultView);
     await render(routes[defaultView]);
 }
 
@@ -28,6 +28,6 @@ export const renderRoute = (viewname, attributes = {}) => {
     const routeToRender = (protectedRoutes.hasOwnProperty(viewname) ? autenticate(route) : route);
     
     NavAuth();
-    renderNav();
+    renderNav(viewname);
     render(routeToRender, attributes);
 }

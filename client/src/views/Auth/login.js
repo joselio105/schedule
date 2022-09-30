@@ -4,7 +4,7 @@ import FormBlockInputPassword from "../../components/FormBlockInputPassword.js";
 import FormBlockInput from "../../components/FormBlockInput.js";
 import { defaultView, renderRoute } from "../../routes/management.js";
 import { get, post } from "../../api/server.js";
-import { isAuthenticated, logout, saveAuth, saveUser } from "../../tools/Auth.js";
+import { getAuth, getToken, isAuthenticated, logout, saveAuth, saveUser } from "../../tools/Auth.js";
 import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
 
 const buttons = [

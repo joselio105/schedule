@@ -1,7 +1,7 @@
 import createHtml, { createButton } from "../render/HtmlElement.js";
-import { hours, weekDays, getWeekTitle, oneDay, getCompleteDate, getUtilWeekDays, getEventDuration, getWeekDay, getMonth  } from "../tools/Date.js";
-import getEvents from "../api/events.js";
+import { hours, weekDays, getWeekTitle, oneDay, getCompleteDate, getUtilWeekDays, getEventDuration, getWeekDay, getMonth, getMonthDays  } from "../tools/Date.js";
 import { renderRoute } from "../routes/management.js";
+import { get } from "../api/server.js";
 
 const renderCalendar = (timeStamp=null) => {
     resetCalendarContainer(container);
@@ -95,7 +95,8 @@ const setCalendarWeekDays = (calendar, timeStamp) => {
     calendar.appendChild(weekDaysWrapper);
 }
 
-const setCalendarContent = (calendar, timeStamp) => {  
+const setCalendarContent = async (calendar, timeStamp) => {  
+    const dateobject = timeStamp === null ? new Date() : new Date(timeStamp)
     const contentWrapper = createHtml('div', { class: "content-wrapper" });
     const hoursLabelWrapper = createHtml('div', { classes: ['label-content'] });
     hours.forEach( hour => {
@@ -108,6 +109,12 @@ const setCalendarContent = (calendar, timeStamp) => {
     })
     contentWrapper.appendChild(hoursLabelWrapper);
     
+    const monthDays = getMonthDays(timeStamp);   
+    const events = await get('schedules', {
+        from: monthDays[0].apiDate,
+        to: monthDays[monthDays.length - 1].apiDate
+    });
+
     getUtilWeekDays(timeStamp).forEach( day => {  
         const hoursWrapper = createHtml('div', { classes: ['day-content', day.date] });
         hours.forEach( hour => {
@@ -121,7 +128,7 @@ const setCalendarContent = (calendar, timeStamp) => {
              hoursWrapper.appendChild(content);
         })
         
-        renderEvents(hoursWrapper, day);        
+        renderEvents(hoursWrapper, day, events);        
 
         contentWrapper.appendChild(hoursWrapper);
     });
@@ -140,28 +147,28 @@ const resetCalendarContainer = container => {
     container.appendChild(children[1]);
 }
 
-const renderEvents = async (container, day) => {
-    const events = await getEvents(day.date);
-    
+const renderEvents = async (container, day, events) => {    
     events.forEach( event => {
-        const eventTag = createHtml(
-            'button', {
-                text: event.title,
-                id: event.id,
-                title: "Clique para visualizar este agendamento",
-                classes: [
-                    'schedule-event'
-                ]
-            }
-        )
-        const eventStart = getEventDuration( event.start) /10;
-        const eventDuration = getEventDuration( event.stop, event.start) /10
-        eventTag.style.top = `${eventStart}rem`;
-        eventTag.style.height = `${eventDuration}rem`;
+        if(day.date === event.day){
+            const eventTag = createHtml(
+                'button', {
+                    text: event.title,
+                    id: event.id,
+                    title: "Clique para visualizar este agendamento",
+                    classes: [
+                        'schedule-event'
+                    ]
+                }
+            )
+            const eventStart = getEventDuration( event.start) /10;
+            const eventDuration = getEventDuration( event.stop, event.start) /10
+            eventTag.style.top = `${eventStart}rem`;
+            eventTag.style.height = `${eventDuration}rem`;
 
-        eventTag.addEventListener('click', createClickHandler);
+            eventTag.addEventListener('click', createClickHandler);
 
-        container.appendChild(eventTag);
+            container.appendChild(eventTag);
+        }
     })
 }
 

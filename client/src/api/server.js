@@ -1,37 +1,60 @@
-import { getToken, getUser } from "../tools/Auth.js";
-import { hoursStringToInt } from "../tools/Date.js";
-
-// export const host = 'https://arq.ufsc.br/api/?';
-export const host = 'http://localhost/arqAdmin/server/?';
+import { getToken, getUser, logout } from "../tools/Auth.js";
+import config from "../configs/config.js";
 
 const getResponse = async (controller, init) => {
 
+    const { body, method } = init;
+    const token = getToken();
+    
+    const headers = new Headers();
+    headers.set('Accept', "application/json");
+    headers.set('Authorization', `Bearer ${token}`);
+
     const request = new Request(
-        `${host}${controller}`, 
-        init
+        config.apiRoot + controller,
+        {
+            method,
+            body,
+            headers
+        }
     );
     
     const result = await fetch(request)
-        .then(response => (response.json()))
-        .then(responseJson => (responseJson))
-        
+        .then(r1 => {
+            return r1.json()}
+        )
+        .then(r2 => r2);
+    
     return result;
 }
 
 export const get = async (controller, params={}) => {
     const token = getToken();
+    
     const headers = new Headers();
+    headers.set('Accept', "application/json");
+    headers.set('Content-Type', "application/json");    
+    
+    if(token){
+        headers.set('Authorization', `Bearer ${token}`);
+    }
 
     const paramsArray = Object.keys(params).map(param => (`${param}=${params[param]}`));
     const paramsString = paramsArray.length > 0 ? `&${paramsArray.join('&')}` : '';
 
-    if(token){
-        headers.set('Authorization', `Bearer ${token}`);
-    }
-    const response = await getResponse(controller + paramsString, {
-        method: 'GET',
-        headers
-    });
+    const request = new Request(
+        config.apiRoot + controller + paramsString,
+        {
+            method: 'GET',
+            headers
+        }
+    );
+
+    const response = await fetch(request)
+        .then(r1 => {
+            return r1.json()
+        })
+        .then(r2 => r2);  
 
     return response;
 }
@@ -39,29 +62,21 @@ export const get = async (controller, params={}) => {
 export const post = async (controller, form) => {
     const body = getFormObject(form);
 
-    const headers = new Headers({
-        // 'Content-Type': 'application/json',
-        // 'Content-Length': body.length.toString(),
-        // 'X-Custom-Header': 'ProcessThisImmediately',
-        'Authorization': 'Bearer ' + getToken()
-    });
-
     return await getResponse(controller, {
         method: 'POST',
-        body,
-        headers
+        body
     });
 }
 
 export const put = async (controller, form, objectId) => {
     const body = getFormJson(form, objectId);
 
-    const headers = new Headers({
+    const headers = {
         'Content-Type': 'application/json',
         'Content-Length': body.length.toString(),
         'X-Custom-Header': 'ProcessThisImmediately',
         'Authorization': 'Bearer ' + getToken()
-    });
+    };
 
     const response = await getResponse(controller, {
         method: 'PUT',
@@ -75,12 +90,12 @@ export const put = async (controller, form, objectId) => {
 export const patch = async (controller, form, objectId) => {
     const body = getFormJson(form, objectId);
 
-    const headers = new Headers({
+    const headers = {
         'Content-Type': 'application/json',
         'Content-Length': body.length.toString(),
         'X-Custom-Header': 'ProcessThisImmediately',
         'Authorization': 'Bearer ' + getToken()
-    });
+    };
 
     const response = await getResponse(controller, {
         method: 'PATCH',
@@ -92,12 +107,12 @@ export const patch = async (controller, form, objectId) => {
 }
 
 export const erase = async (controlerUrl, idObject, attributes={}) => {
-    const headers = new Headers({
+    const headers = {
         // 'Content-Type': 'application/json',
         // 'Content-Length': body.length.toString(),
         // 'X-Custom-Header': 'ProcessThisImmediately',
         'Authorization': 'Bearer ' + getToken()
-    });
+    };
 
     const controlerInit = `${controlerUrl}&${idObject.name}=${idObject.value}`;
     const complement = [];
