@@ -7,6 +7,7 @@ import createFormSelect from "../../components/FormBlockSelect.js";
 import { renderRoute } from "../../routes/management.js";
 import { hoursStringToInt, intToHoursString } from "../../tools/Date.js";
 import { post, put } from "../../api/server.js";
+import { setLoading, unsetLoading } from "../../components/Loading.js";
 
 export default async attributes => {
     const { type } = attributes;
@@ -203,7 +204,9 @@ const handleSubmit = async (event, id) => {
     form.set('start', startValue);
     form.set('stop', stopValue);
 
+    setLoading()
     if(id){
+        
         const result = await put(
             'schedules', 
             form, 
@@ -230,4 +233,5 @@ const handleSubmit = async (event, id) => {
             renderRoute('schedule', result);
         }        
     }    
+    unsetLoading();
 }

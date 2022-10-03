@@ -2,6 +2,7 @@ import { post, put } from "../../api/server.js";
 import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
 import createForm from "../../components/Form.js"
 import FormBlockInput from "../../components/FormBlockInput.js";
+import { setLoading, unsetLoading } from "../../components/Loading.js";
 import createElement from "../../render/HtmlElement.js";
 import { renderRoute } from "../../routes/management.js";
 import { logout } from "../../tools/Auth.js";
@@ -42,10 +43,10 @@ buttons[0].addEventListener('click', event=>{
 const handleSubmit = async event => {
     event.preventDefault();
     logout();
-    
+    setLoading();
     const formData = new FormData(event.target);
     
     const response = await post('password', formData);
-    console.log(response)
-    setFeedbackMessage(response.message);
+    setFeedbackMessage(response.error);
+    unsetLoading();
 }

@@ -1,21 +1,19 @@
 import createElement from "../../render/HtmlElement.js";
 import createForm from "../../components/Form.js"
 import FormBlockInputPassword from "../../components/FormBlockInputPassword.js";
+import ButtonSubmit from "../../components/ButtonSubmit.js";
 import FormBlockInput from "../../components/FormBlockInput.js";
 import { defaultView, renderRoute } from "../../routes/management.js";
 import { get, post } from "../../api/server.js";
-import { getAuth, getToken, isAuthenticated, logout, saveAuth, saveUser } from "../../tools/Auth.js";
+import { isAuthenticated, logout, saveAuth, saveUser } from "../../tools/Auth.js";
 import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
+import { setLoading, unsetLoading } from "../../components/Loading.js";
 
 const buttons = [
     createElement('button', {
         text: '(re)Cadastrar senha'
     }),
-    createElement('button', {
-        type: 'submit',
-        class: 'submit',
-        text: 'Fazer login'
-    })
+    ButtonSubmit('Fazer Login')
 ];
 
 buttons[0].addEventListener('click', event=>{
@@ -29,8 +27,8 @@ const handleSubmit = async event => {
     }
     const formData = new FormData(event.target);
     
+    setLoading();
     const response = await post('auth', formData);
-
     if(response.error){
         setFeedbackMessage(response.error);
     }else{
@@ -48,6 +46,7 @@ const handleSubmit = async event => {
             setFeedbackMessage("");
         }
     }
+    unsetLoading();
 }
 
 export default attributes => {  

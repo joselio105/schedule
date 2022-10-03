@@ -1,10 +1,13 @@
 import { getEvent } from "../../api/events.js";
+import { setLoading, unsetLoading } from "../../components/Loading.js";
 import createHtml from "../../render/HtmlElement.js"
 import { renderRoute } from "../../routes/management.js";
 import { intToHoursString, months } from "../../tools/Date.js";
 
 export default async attributes => {
+    setLoading();
     const event = await getEvent(parseInt(attributes.id));
+    unsetLoading();
     
     return [
         setTitle(event),

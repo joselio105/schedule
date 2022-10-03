@@ -4,6 +4,7 @@ import createForm from "../../components/Form.js";
 import createFormInput from "../../components/FormBlockInput.js";
 import { renderRoute } from "../../routes/management.js";
 import { erase } from "../../api/server.js";
+import { setLoading, unsetLoading } from "../../components/Loading.js";
 
 export default async attributes => {
     const { event } = attributes;
@@ -69,6 +70,8 @@ const handleSubmit = async (event, schedule) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const allEvents = form.get('allEvents') !== null;
+
+    setLoading();
     if(allEvents && schedule.parent_id){
         const result = await erase(
             'schedules', 
@@ -101,5 +104,6 @@ const handleSubmit = async (event, schedule) => {
             renderRoute('schedule', { result, type: schedule.viewType});
         } 
     } 
+    unsetLoading();
        
 }

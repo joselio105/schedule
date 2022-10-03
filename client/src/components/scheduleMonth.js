@@ -2,6 +2,7 @@ import createHtml, { createButton } from "../render/HtmlElement.js";
 import { weekDays, getWeekTitle, oneDay, getStringDay, getCompleteDate, getWeekDay, getMonth, getMonthDays, getMonthInfo } from "../tools/Date.js";
 import { renderRoute } from "../routes/management.js";
 import { get } from "../api/server.js";
+import { setLoading, unsetLoading } from "./Loading.js";
 
 const renderCalendar = (timeStamp=null) => {
     resetCalendarContainer(container);
@@ -111,6 +112,7 @@ const setCalendarContent = async (calendar, timeStamp) => {
 }
 
 const renderEvents = async (container, day, events) => {
+    setLoading();
     events.forEach( event => {
         if(day.apiDate === event.day){
             const eventTag = createHtml(
@@ -128,6 +130,7 @@ const renderEvents = async (container, day, events) => {
             container.appendChild(eventTag);
         }
     })
+    unsetLoading();
 }
 
 const resetCalendarContainer = container => {

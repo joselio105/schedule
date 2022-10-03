@@ -4,6 +4,7 @@ import createElement, { createTextNode } from "../../render/HtmlElement.js";
 import createForm from "../../components/Form.js";
 import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
 import FormBlockInputPassword, { passwordIsValid } from "../../components/FormBlockInputPassword.js";
+import { setLoading, unsetLoading } from "../../components/Loading.js";
 
 const fields = [
     FormBlockInputPassword('password', 'Digite sua nova senha', {
@@ -64,6 +65,7 @@ buttons[0].addEventListener('click', event=>{
 const handleSubmit = async event => {
     event.preventDefault();
 
+    setLoading();
     if(passwordIsValid()){
         const form = new FormData(event.currentTarget);
         const { id } = getUser(form.get('token'));
@@ -79,6 +81,7 @@ const handleSubmit = async event => {
             renderRoute('login', { message: result});
         }
     }
+    unsetLoading();
 }
 
 const createTimer = (minutes, seconds) => {
