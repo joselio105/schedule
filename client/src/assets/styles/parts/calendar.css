@@ -1,19 +1,24 @@
-.calendar-week{
-    display: flex;
-    flex-direction: column;
-    margin-top: 2rem;
-    border-radius: 1rem;
+.calendar-container{
+    position: relative;
+    overflow-x: auto;
     border: 2px solid var(--color-background-darker);
 }
 
+.calendar-week{
+    width: 100%;
+    margin-top: 2rem;
+    border-radius: 1rem;
+}
+
 .calendar-week .calendar-head{
-    height: 7rem;
-    display: flex;
+    width: 100%;
+    display: inline-flex;
     justify-content: space-between;
     align-items: center;
     background: var(--color-primary-darker);
     color: var(--color-text-on-dark);
     border-radius: 1rem 1rem 0 0;
+    padding: 1rem 0;
 }
 
 .calendar-week .calendar-head .button{
@@ -51,12 +56,14 @@
 }
 
 .calendar-week .month-days{
+    min-width: 100%;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
 }
 
 .calendar-week .week-days .day,
 .calendar-week .month-days .day{
+    min-width: 2.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -95,6 +102,7 @@
 }
 
 .calendar-week .content-wrapper{
+    min-width: 100%;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
 }
@@ -113,6 +121,7 @@
 
 .calendar-week .content-wrapper .label-content .hours-label,
 .calendar-week .content-wrapper .day-content .hours-content{
+    min-width: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;

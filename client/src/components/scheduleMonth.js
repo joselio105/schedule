@@ -7,11 +7,13 @@ import { setLoading, unsetLoading } from "./Loading.js";
 const renderCalendar = (timeStamp=null) => {
     resetCalendarContainer(container);
 
+    const calendarContainer = createHtml('div', {class: "calendar-container"});
     const calendar = createHtml('div', { class: "calendar-week" });
     setCalendarHead(container, calendar, timeStamp);
     setCalendarWeekDays(calendar, timeStamp);
     setCalendarContent(calendar, timeStamp);
     
+    calendarContainer.appendChild(calendar);
     return calendar;
 }
 

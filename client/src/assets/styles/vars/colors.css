@@ -26,7 +26,7 @@
     --color-surface: var(--gray_light);
     --color-surface-light: var(--gray_lighter);
     --color-error: var(--red_dark);
-    --color-title-on-primary: var(--red_dark);
+    --color-title-on-primary: var(--green_oil);
     --color-text-on-primay: var(--gray_darker);
     --color-text-on-dark: var(--white);
     --color-text-on-primay-light: var(--gray_dark);
