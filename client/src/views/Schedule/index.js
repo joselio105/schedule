@@ -4,6 +4,8 @@ import scheduleWeek from "../../components/scheduleWeek.js";
 import scheduleMonth from "../../components/scheduleMonth.js";
 
 export default attributes => {
+    document.title = "Labmicro | Agenda";
+    
     const calendarType = attributes.hasOwnProperty('type') ? attributes.type : 'week';
 
     return [

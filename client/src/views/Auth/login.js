@@ -50,6 +50,8 @@ const handleSubmit = async event => {
 }
 
 export default attributes => {  
+    document.title = "ARQ/UFSC | Autenticação";
+
     if(attributes.message){
         setFeedbackMessage('Senha alterada com sucesso');
     }

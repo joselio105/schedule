@@ -31,6 +31,8 @@ const buttons = [
 const getUser = token => JSON.parse(atob(token));
 
 export default attributes => {
+    document.title = "ARQ/UFSC | Alterar senha";
+
     const { token } = attributes;
     const user = getUser(token);
 

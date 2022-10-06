@@ -26,6 +26,8 @@ const buttons = [
 ];
 
 export default attributes => {
+    document.title = "ARQ/UFSC | Solicitar nova senha";
+
     const form = createForm(fields, buttons);
     form.addEventListener('submit', handleSubmit);
     
