@@ -40,7 +40,8 @@
     padding: 1rem; 
     font-size: 1rem;
     text-transform: uppercase;
-    transition: transform .3s;    
+    background: var(--color-primary-dark);
+    transition: background-color .3s;    
 }
 
 #container .content-page .commands .delete{
@@ -49,7 +50,7 @@
 }
 
 #container .content-page .commands .button:hover{
-    transform: scale(1.1) translate(-.8rem, -.8rem);
+    background: var(--color-secondary-dark);
 }
 
 #container .content-page .commands .select-block{

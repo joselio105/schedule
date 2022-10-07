@@ -14,12 +14,21 @@
     overflow: hidden;
     display: grid;
     grid-template-rows: 1fr 1.5fr .3fr;
+    box-shadow: var(--shadow-card);
 }
 
 #container .content-page .card-wrapper .card .card-header{
-    background: transparent;
+    padding: .5rem;
     display: grid;
     grid-template-rows: repeat(2, 1fr);
+    border-bottom: 1px solid var(--color-primary-dark);
+}
+
+#container .content-page .card-wrapper .sdo .card-header{
+    background: var(--color-primary-light);
+}
+#container .content-page .card-wrapper .sta .card-header{
+    background: var(--color-primary);
 }
 
 #container .content-page .card-wrapper .card .card-header .card-title{
@@ -32,6 +41,14 @@
     line-height: 1.5rem;
 }
 
+#container .content-page .card-wrapper .card .card-main{
+    padding: .5rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    margin-top: 1rem;
+}
+
 #container .content-page .card-wrapper .card .card-header .element-header-nav,
 #container .content-page .articles-wrapper .article .element-header-nav,
 #container .content-page .card-wrapper .card .documents,
@@ -39,7 +56,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: .8rem;
+    /* padding: .5rem; */
 }
 
 #container .content-page .card-wrapper .card .links{
@@ -90,18 +107,18 @@
     color: var(--color-text-on-dark);
     font-size: .75rem;
     text-transform: uppercase;
-    transition: background .5s;
+    transition: background-color .5s;
 }
 
 #container .content-page .page-header .create:hover,
 #container .content-page .card-wrapper .card .card-header .element-header-nav .command:hover,
 #container .content-page .card-wrapper .card .links .button-link:hover,
 #container .content-page .articles-wrapper .article .element-header-nav .command:hover{
-    background: var(--color-seconday);
+    background: var(--color-secondary-dark);
 }
 
 #container .content-page .card-wrapper .card .card-footer{
-    background-color: var(--color-primary-darker);
+    background-color: var(--color-primary-dark);
     color: var(--color-text-on-dark);
     padding: .5rem;
     margin-top: 1rem;

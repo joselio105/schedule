@@ -25,12 +25,10 @@ export default (calendarType) => {
             value: options[value].type
          }, 
         { 
-            src: "./src/assets/images/icons/plus.svg",
+            src: "./src/assets/images/icons/plus-white.svg",
             alt: "novo evento"
          }
     );
-    
-    commands.appendChild(buttonCreate);
 
     const selectBlock = setSelectBlock(commands, {
         id: "view",
@@ -40,6 +38,8 @@ export default (calendarType) => {
     });
     buttonCreate.addEventListener('click', createHandler);
     selectBlock.children[1].addEventListener('change', changeHandler);
+    
+    commands.appendChild(buttonCreate);
     
     return commands;
 }
