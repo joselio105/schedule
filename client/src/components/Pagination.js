@@ -2,7 +2,7 @@ import createElement from "../render/HtmlElement.js";
 import { renderRoute } from "../routes/management.js";
 
 export default pageInfo => {
-    const { page, totalPages, previousPage, nextPage, routeName } = pageInfo;
+    const { page, totalPages, previousPage, nextPage, routeName, ... attributes } = pageInfo;
 
     const pagination = createElement('section', {class: 'pagination'});
     
@@ -12,7 +12,7 @@ export default pageInfo => {
         alt: 'página anterior'
     });
     controllLeft.addEventListener('click', event => {
-        renderRoute(routeName, { page: previousPage });
+        renderRoute(routeName, { page: previousPage, ... attributes });
     });
     controllLeft.appendChild(imageLeft);
     
@@ -22,7 +22,7 @@ export default pageInfo => {
         alt: 'página seguinte'
     });
     controllRight.addEventListener('click', event => {
-        renderRoute(routeName, { page: nextPage });
+        renderRoute(routeName, { page: nextPage, ... attributes });
     });
     controllRight.appendChild(imageRight);
 

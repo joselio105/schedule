@@ -16,6 +16,11 @@ export default (fieldName, labelText, values, inputAttrs={}) => {
             value,
             text
         });
+        if(inputAttrs.hasOwnProperty('value')){
+            if(inputAttrs.value === value){
+                option.selected = 'select';
+            }
+        }
 
         select.appendChild(option);
     });

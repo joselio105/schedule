@@ -1,23 +1,31 @@
 import createElement from "../../render/HtmlElement.js";
 import { get } from "../../api/server.js";
 import createCard from "../../components/userCard.js";
-import createCommands from "../../components/userCommands.js";
+import createCommands from "../../components/pageCommands.js";
 import createPagination from "../../components/Pagination.js";
 
 export default async attributes => {
     document.title = "ARQ/UFSC | Servidores";
 
-    const page = (attributes.page ?  attributes.page : 1);
+    attributes.page = (attributes.hasOwnProperty('page') ?  attributes.page : 1);
     const params = {
-        order: "nome",
         paginate: true,
         pageLimit: 12,
-        page
+        page: attributes.page,
+        order: "nome",
     }
     if(attributes.hasOwnProperty('tipo') && attributes.tipo !='null'){
         params.tipo = attributes.tipo;
     }
-    console.log(params)
+    if(attributes.hasOwnProperty('saida') && attributes.saida !='null'){
+        params.saida = attributes.saida;
+    }
+    if(attributes.hasOwnProperty('lattes') && attributes.lattes !='null'){
+        params.lattes = attributes.lattes;
+    }
+    if(attributes.hasOwnProperty('site') && attributes.site !='null'){
+        params.site = attributes.site;
+    }
     const users = await get(`users`, params);
     
     const { totalPages, nextPage, previousPage } = users;
@@ -26,11 +34,12 @@ export default async attributes => {
         createHeader(attributes),
         createList(users),
         createPagination({ 
-            page, 
+            page: attributes.page, 
             totalPages, 
             previousPage, 
             nextPage, 
-            routeName:'users' 
+            routeName:'users' ,
+            ... attributes
         })
     ];
 }

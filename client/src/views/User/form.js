@@ -5,12 +5,14 @@ import FormBlockSelect from "../../components/FormBlockSelect.js";
 import { get, post, put } from "../../api/server.js";
 import { renderRoute } from "../../routes/management.js";
 import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
+import { setLoading, unsetLoading } from "../../components/Loading.js";
 
 export default async attributes => {
     let user = {};
     
     if(attributes.id){
         user = await get(`users&id=${attributes.id}`);
+        console.log(user)
     }
 
     return [
@@ -25,6 +27,7 @@ const createForm = user => {
     const buttons = getButtons(user);
     const form = createFom(fields, buttons);
 
+    form.addEventListener('submit', event => handleSubmit(event, user.id));
     return form;
 }
 
@@ -70,7 +73,7 @@ const getFields = user => {
         FormBlockSelect('tipo', 'Tipo', {
             'Docente': 'sdo',
             'Tecnico Administrativo': 'sta'
-        }),
+        }, { value: user.tipo}),
         FormBlockInput('site', 'Site', {
             type: 'url',
             value: (user.site ? user.site : ''),
@@ -85,7 +88,15 @@ const getFields = user => {
             type: 'url',
             value: (user.youtube ? user.youtube : ''),
             placeholder: 'Digite a URL do seu canal do youtube'
-        })        
+        }),
+        FormBlockInput('ingresso', 'Entrada', {
+            value: (user.ingresso ? user.ingresso : ''),
+            placeholder: 'Digite o ano de entrada do servuidor'
+        }) ,
+        FormBlockInput('saida', 'Saída', {
+            value: (user.saida ? user.saida : ''),
+            placeholder: 'Digite o ano de desligamento do servuidor'
+        })      
     ];
 }
 
@@ -105,48 +116,45 @@ const getButtons = user => {
     ];
 
     buttons[0].addEventListener('click', handleBack);
-    buttons[1].addEventListener('click', handleSubmit);
 
     return buttons;
 }
 
-const handleSubmit = event => {
-    
-    const action = event.currentTarget.classList[1];
-    const id = event.currentTarget.value;
-    const form = event.path[2];
-    
-    const actions = {
-        create: form => {
-            post('users', form)
-            .then( result => {
-                if(result.error){
-                    setFeedbackMessage(result.error);
-                }else{
-                    setFeedbackMessage('Usuário cadastrado com sucesso');
-                    renderRoute('users');
-                }
-            })
-        },
-        update: form => {
-            put('users', form, {
-                name: 'servidorID',
-                value: id
-            })
-            .then( result => {
-                if(result.error){
-                    setFeedbackMessage(result.error);
-                }else{
-                    setFeedbackMessage('Usuário atualizado com sucesso');
-                    renderRoute('users');
-                }
-            })
-        }
-    };
-
-    actions[action](form);
-
+const handleSubmit = async (event, id) => {
     event.preventDefault();
+    
+    const form = new FormData(event.currentTarget);
+    
+    setLoading()
+    if(id){        
+        const result = await put(
+            'users', 
+            form, 
+            {
+                name: 'id',
+                value: parseInt(id)
+            }
+        );
+        
+        if(result.hasOwnProperty('error')){
+            setFeedbackMessage(result.error);
+        }else{
+            renderRoute('users', result);
+        }
+    }else{
+        const result = await post(
+            'users',
+            form
+        );
+
+        if(result.hasOwnProperty('error')){
+            setFeedbackMessage(result.error);
+        }else{
+            renderRoute('users', result);
+        }        
+    }    
+    unsetLoading();
+    
 }
 
 const handleBack = event => {
