@@ -23,7 +23,8 @@ const getResponse = async (controller, init) => {
         .then(r1 => {
             return r1.json()}
         )
-        .then(r2 => r2);
+        .then(r2 => r2)
+        .catch(error => console.log(error));
     
     return result;
 }

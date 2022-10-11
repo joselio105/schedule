@@ -6,13 +6,13 @@ import { get, post, put } from "../../api/server.js";
 import { renderRoute } from "../../routes/management.js";
 import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
 import { setLoading, unsetLoading } from "../../components/Loading.js";
+import FormCheckboxes from "../../components/FormCheckboxes.js";
 
 export default async attributes => {
     let user = {};
     
     if(attributes.id){
         user = await get(`users&id=${attributes.id}`);
-        console.log(user)
     }
 
     return [
@@ -79,10 +79,10 @@ const getFields = user => {
             value: (user.site ? user.site : ''),
             placeholder: 'Digite a URL do seu site'
         }),
-        FormBlockInput('Memorial', 'Memorial', {
+        FormBlockInput('lattes', 'Lattes', {
             type: 'url',
-            value: (user.Memorial ? user.Memorial : ''),
-            placeholder: 'Digite a URL do seu memorial'
+            value: (user.lattes ? user.lattes : ''),
+            placeholder: 'Digite a URL do seu currículo lattes'
         }),
         FormBlockInput('youtube', 'Youtube', {
             type: 'url',
@@ -90,13 +90,14 @@ const getFields = user => {
             placeholder: 'Digite a URL do seu canal do youtube'
         }),
         FormBlockInput('ingresso', 'Entrada', {
-            value: (user.ingresso ? user.ingresso : ''),
+            value: (user.ingresso ? user.ingresso : new Date().getFullYear()),
             placeholder: 'Digite o ano de entrada do servuidor'
         }) ,
         FormBlockInput('saida', 'Saída', {
-            value: (user.saida ? user.saida : ''),
+            value: (user.saida ? user.saida : '0000'),
             placeholder: 'Digite o ano de desligamento do servuidor'
-        })      
+        })  ,
+        FormCheckboxes("Permissões", getPermitionOptions(user))    
     ];
 }
 
@@ -120,11 +121,60 @@ const getButtons = user => {
     return buttons;
 }
 
+const getPermitionOptions = user => {
+    const permitionsOptions = [
+        {
+            id: "permitions",
+            value: "auth",
+            label: "Autenticação",
+        },
+        {
+            id: "permitions",
+            value: "users",
+            label: "Usuários",
+        },
+        {
+            id: "permitions",
+            value: "schedule",
+            label: "Agenda",
+        },
+        {
+            id: "permitions",
+            value: "articles",
+            label: "Artigos",
+        },
+        {
+            id: "permitions",
+            value: "files",
+            label: "Arquivos",
+        },
+        {
+            id: "permitions",
+            value: "secctions",
+            label: "Setores",
+        },
+        {
+            id: "permitions",
+            value: "place",
+            label: "Cargos",
+        },
+    ];
+
+    if(user.hasOwnProperty('permitions')){
+        permitionsOptions.forEach( option => {
+            option.checked = user.permitions.includes(option.value);
+        })
+    }
+
+    return permitionsOptions;
+}
+
 const handleSubmit = async (event, id) => {
     event.preventDefault();
     
     const form = new FormData(event.currentTarget);
-    
+
+    form.set('permitions', form.getAll('permitions').join(', '));
     setLoading()
     if(id){        
         const result = await put(

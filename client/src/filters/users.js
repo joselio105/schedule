@@ -1,6 +1,6 @@
 import { renderRoute } from "../routes/management.js";
 
-export const viewName = "users";
+export const viewName = "user";
 export const pageName = "servidor";
 
 export default {    
