@@ -1,5 +1,5 @@
 import createElement from "../render/HtmlElement.js";
-import createButtonsWrapper from "../components/ButtonsWrapper.js";
+import createButtonsWrapper from "./UserButtonsWrapper.js";
 import createCardFooter from "../components/ElementFooter.js";
 
 export default user => {
@@ -23,7 +23,7 @@ const getCardHeader = (card, user) => {
         text: user.nome
     });
 
-    const nav = createButtonsWrapper('user', user);
+    const nav = createButtonsWrapper('users', user);
 
     header.appendChild(title);
     header.appendChild(nav);
@@ -36,7 +36,6 @@ const getCardBody = (card, user) => {
     });
 
     const bodyContent = [
-        // createElement('p', { text: user.status }),
         createDocsContainer(user),
         createInfoLabeled('nascimento', new Date(user.nascimento).toLocaleDateString()),
         createInfoLabeled('e-mail', user.email),

@@ -6,7 +6,7 @@ import { renderNav } from "../tools/NavMain.js";
 
 const attribute = {};
 
-export const defaultView = "users";
+export const defaultView = "schedule";
 
 export default async () => {
 

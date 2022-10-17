@@ -78,10 +78,9 @@ export const renderNav = viewName => {
         },
     ];
 
-    if(user){
+    if(user && user.permitions){
         const ul = createElement('ul');
         links.forEach(link => {
-            
             if(user.permitions.includes(link.value)){
                 const li = createElement('li');
                 viewFamily === link.value ? li.classList.add('active') : null;
@@ -89,7 +88,7 @@ export const renderNav = viewName => {
 
                 button.addEventListener('click', () => {
                     renderRoute(link.value);
-                    link.classList.add('active');
+                    li.classList.add('active');
                 })
 
                 li.appendChild(button);

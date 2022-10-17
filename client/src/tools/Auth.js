@@ -2,12 +2,10 @@ const authKey = 'auth';
 const userKey = 'user';
 
 export const saveAuth = auth => {
-    console.log(auth)
     localStorage.setItem(authKey, JSON.stringify(auth));
 }
 
 export const saveUser = user => {
-    console.log(user)
     localStorage.setItem(userKey, JSON.stringify(user));
 }
 

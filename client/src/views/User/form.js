@@ -95,7 +95,7 @@ const getFields = user => {
         }) ,
         FormBlockInput('saida', 'Saída', {
             value: (user.saida ? user.saida : '0000'),
-            placeholder: 'Digite o ano de desligamento do servuidor'
+            placeholder: 'Digite o ano de desligamento do servidor'
         })  ,
         FormCheckboxes("Permissões", getPermitionOptions(user))    
     ];

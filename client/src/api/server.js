@@ -32,14 +32,6 @@ const getResponse = async (controller, init) => {
 export const get = async (controller, params={}) => {
     const token = getToken();
     
-    const headers = new Headers();
-    headers.set('Accept', "application/json");
-    headers.set('Content-Type', "application/json");    
-    
-    if(token){
-        headers.set('Authorization', `Bearer ${token}`);
-    }
-
     const paramsArray = Object.keys(params).map(param => (`${param}=${params[param]}`));
     const paramsString = paramsArray.length > 0 ? `&${paramsArray.join('&')}` : '';
 
@@ -47,7 +39,9 @@ export const get = async (controller, params={}) => {
         config.apiRoot + controller + paramsString,
         {
             method: 'GET',
-            headers
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         }
     );
 
@@ -56,7 +50,7 @@ export const get = async (controller, params={}) => {
             return r1.json()
         })
         .then(r2 => r2);  
-
+        
     return response;
 }
 
@@ -109,8 +103,7 @@ export const patch = async (controller, form, objectId) => {
 
 export const erase = async (controlerUrl, idObject, attributes={}) => {
     const headers = {
-        // 'Content-Type': 'application/json',
-        // 'Content-Length': body.length.toString(),
+        'Content-Type': 'application/json',
         // 'X-Custom-Header': 'ProcessThisImmediately',
         'Authorization': 'Bearer ' + getToken()
     };
@@ -119,17 +112,25 @@ export const erase = async (controlerUrl, idObject, attributes={}) => {
     const complement = [];
     Object.keys(attributes).forEach(key=>complement.push(`${key}=${attributes[key]}`));
 
-    const controler = complement.length > 0 
-        ? controlerInit + '&' + complement.join('&') 
-        : controlerInit;
-        
-    return await getResponse(
-        controler,
+    const controller = controlerInit + (complement.length > 0 
+        ? '&' + complement.join('&') 
+        : "");
+
+    const request = new Request(
+        config.apiRoot + controller,
         {
             method: 'DELETE',
             headers
         }
-    )
+    );
+
+    const response = await fetch(request)
+        .then(r1 => {
+            return r1.json()
+        })
+        .then(r2 => r2);  
+    
+    return response;
 }
 
 const getFormObject = formData => {

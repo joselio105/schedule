@@ -1,7 +1,8 @@
 import login from "../views/Auth/login.js";
 import password from "../views/Auth/password.js";
 import askPassword from "../views/Auth/askPassword.js";
-import notFound from "../views/NotFound.js";
+import notFound from "../views/Common/notFound.js";
+import deleteForm from "../views/Common/delete.js";
 // import articles from "../views/Article/index.js";
 // import articleForm from "../views/Article/form.js";
 import users from "../views/User/index.js";
@@ -23,7 +24,8 @@ export default {
     login,
     password,
     askPassword,
-    notFound
+    notFound,
+    deleteForm
 }
 
 export const protectedRoutes = {
@@ -31,6 +33,7 @@ export const protectedRoutes = {
     scheduleDelete,
     // articles,
     // articleForm,
-    users,
-    userForm
+    // users,
+    userForm,
+    deleteForm
 };

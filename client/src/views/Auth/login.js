@@ -29,21 +29,23 @@ const handleSubmit = async event => {
     
     setLoading();
     const response = await post('auth', formData);
+
     if(response.error){
         setFeedbackMessage(response.error);
     }else{
+        logout();
         if(response.token){
             saveAuth(response);
             const user = await get('auth');
             
             if(user.error){
-                setFeedbackMessage(response.error);
+                setFeedbackMessage(user.error);
             }else{
                 saveUser(user);
                 renderRoute(defaultView);
             }
         }else{
-            setFeedbackMessage("");
+            setFeedbackMessage("Resposta incompleta");
         }
     }
     unsetLoading();
