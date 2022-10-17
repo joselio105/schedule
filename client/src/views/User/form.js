@@ -185,7 +185,7 @@ const handleSubmit = async (event, id) => {
                 value: parseInt(id)
             }
         );
-        
+        console.log(result)
         if(result.hasOwnProperty('error')){
             setFeedbackMessage(result.error);
         }else{

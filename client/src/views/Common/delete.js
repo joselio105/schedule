@@ -7,30 +7,22 @@ import { erase } from "../../api/server.js";
 import { setLoading, unsetLoading } from "../../components/Loading.js";
 
 export default async attributes => {
-    const { event } = attributes;
+    const { viewname, title, id } = attributes;
     
     return [
-        setTitle(event),
+        setTitle(title),
         setFeedback(),
-        setForm(event)
+        setForm(viewname, id)
     ];
 }
 
-const setTitle = event => {
-    return createHtml('h2', { text: `Excluir ${event.title}?` });
+const setTitle = title => {
+    return createHtml('h2', { text: `Excluir ${title}?` });
 }
 
-const setForm = schedule => {
-    const fields = [
-        createFormInput(
-            'allEvents', 
-            'Excluir toda a sequencia de repetições?', 
-            {
-                type: 'checkbox'
-            }
-        )
-    ];
-    const buttons = setButtons(schedule);
+const setForm = (viewname, id) => {
+    const fields = [];
+    const buttons = setButtons(viewname, id);
 
     const form = createForm(fields, buttons);
     form.addEventListener('submit', event => handleSubmit(event, schedule));
@@ -38,18 +30,17 @@ const setForm = schedule => {
     return form;
 }
 
-const setButtons = event => {
+const setButtons = (viewname, id) => {
     const buttons = [
         createHtml('button', {
             class: 'back',
             text: 'Não',
-            id: 'schedule',
-            value: event.viewType
+            id: viewname
         }),
         createHtml('button', { 
             type: 'submit', 
             classes: ['submit', 'delete'],
-            value: event.id,
+            value: id,
             text: 'Excluir'
         })
     ];

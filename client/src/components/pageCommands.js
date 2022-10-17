@@ -1,6 +1,6 @@
 import createHtml, { createButton, setSelectBlock } from "../render/HtmlElement.js";
 import { renderRoute } from "../routes/management.js";
-import filters, { pageName, viewName } from "../filters/users.js";
+import filters, { pageName, fromName } from "../filters/users.js";
 
 export default attributes => {
     const commands = createHtml('nav', { class: "commands"});
@@ -40,7 +40,7 @@ export default attributes => {
 }
 
 const createHandler = event => {
-    renderRoute(`${viewName}Form`, {
+    renderRoute(fromName, {
         type: event.currentTarget.value,
         id: ''
     });

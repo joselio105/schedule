@@ -1,34 +1,6 @@
 import { getToken, getUser, logout } from "../tools/Auth.js";
 import config from "../configs/config.js";
 
-const getResponse = async (controller, init) => {
-
-    const { body, method } = init;
-    const token = getToken();
-    
-    const headers = new Headers();
-    headers.set('Accept', "application/json");
-    headers.set('Authorization', `Bearer ${token}`);
-
-    const request = new Request(
-        config.apiRoot + controller,
-        {
-            method,
-            body,
-            headers
-        }
-    );
-    
-    const result = await fetch(request)
-        .then(r1 => {
-            return r1.json()}
-        )
-        .then(r2 => r2)
-        .catch(error => console.log(error));
-    
-    return result;
-}
-
 export const get = async (controller, params={}) => {
     const token = getToken();
     
@@ -57,47 +29,59 @@ export const get = async (controller, params={}) => {
 export const post = async (controller, form) => {
     const body = getFormObject(form);
 
-    return await getResponse(controller, {
-        method: 'POST',
-        body
-    });
+    const response = await fetch(config.apiRoot + controller,
+        {
+            method: 'POST',
+            body,
+            headers: {
+                'Authorization': `Bearer ${getToken()}`               
+            }
+        })
+        .then(r1 => {
+            return r1.json()
+        })
+        .then(r2 => r2); 
+    
+    return response;
 }
 
 export const put = async (controller, form, objectId) => {
     const body = getFormJson(form, objectId);
 
-    const headers = {
-        'Content-Type': 'application/json',
-        'Content-Length': body.length.toString(),
-        'X-Custom-Header': 'ProcessThisImmediately',
-        'Authorization': 'Bearer ' + getToken()
-    };
-
-    const response = await getResponse(controller, {
-        method: 'PUT',
-        body,
-        headers
-    });
-
+    const response = await fetch(config.apiRoot + controller,
+        {
+            method: 'PUT',
+            body,
+            headers: {
+                'Authorization': `Bearer ${getToken()}`               
+            }
+        })
+        .then(r1 => {
+            console.log(r1)
+            return r1.json()
+        })
+        .then(r2 => r2)
+        .catch(error => console.log(error)); 
+    
     return response;
 }
 
 export const patch = async (controller, form, objectId) => {
     const body = getFormJson(form, objectId);
 
-    const headers = {
-        'Content-Type': 'application/json',
-        'Content-Length': body.length.toString(),
-        'X-Custom-Header': 'ProcessThisImmediately',
-        'Authorization': 'Bearer ' + getToken()
-    };
-
-    const response = await getResponse(controller, {
-        method: 'PATCH',
-        body,
-        headers
-    });
-
+    const response = await fetch(config.apiRoot + controller,
+        {
+            method: 'PATCH',
+            body,
+            headers: {
+                'Authorization': `Bearer ${getToken()}`               
+            }
+        })
+        .then(r1 => {
+            return r1.json()
+        })
+        .then(r2 => r2); 
+    
     return response;
 }
 
