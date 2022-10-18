@@ -11,6 +11,9 @@
 
 @import url('./parts/calendar.css');
 @import url('./parts/users.css');
+@import url('./parts/articles.css');
+
+@import url('./parts/pagination.css');
 
 
 @import url('./parts/form.css');

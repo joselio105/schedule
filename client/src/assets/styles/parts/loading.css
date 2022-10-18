@@ -36,18 +36,16 @@
 
 .loading-container .loading-balls-Wrapper{
     position: relative;
-    width: 16rem;
-    height: 4rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: .5rem;
     z-index: 150;
 }
 
 .loading-container .loading-balls-Wrapper .loading-ball{
     position: relative;
-    width: 4rem;
-    height: 4rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 50%;
     background: var(--color-secondary);
     z-index: 15;

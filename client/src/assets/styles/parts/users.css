@@ -98,7 +98,7 @@
     min-height: 3rem;
     max-width: 30%;
     padding: 0 1.5rem;
-    border-radius: 1rem;
+    border-radius: .5rem;
     border: none;
     display: flex;
     justify-content: center;
@@ -132,70 +132,6 @@
 #container .content-page .card-wrapper .card .card-footer p strong,
 #container .content-page .card-wrapper .card .card-footer p time{
     font-weight: 600;
-}
-
-/* ########## ARTIGOS ########## */
-
-#container .content-page .articles-wrapper .article .article-summary{
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--color-primary-light);
-}
-
-#container .content-page .articles-wrapper .article .article-summary::before{
-    content: url('../../images/icons/chevron-right.svg');
-    position: absolute;
-}
-
-#container .content-page .articles-wrapper .article[open] .article-summary::before{
-    content: url('../../images/icons/chevron-down.svg');
-    position: absolute;
-}
-
-#container .content-page .articles-wrapper .article .article-summary strong{
-    margin-left: 1rem;
-    font-size: 1.2rem;
-    color: var(--color-text-on-primay);
-    margin-left: 2rem;
-}
-
-#container .content-page .pagination{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: var(--color-primary-dark);
-}
-
-#container .content-page .pagination .command{
-    min-height: 3rem;
-    padding: 0 1.5rem;
-    border-radius: 1rem;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: var(--color-primary-dark);
-    text-transform: uppercase;
-    transition: background .5s;    
-}
-
-#container .content-page .pagination span{
-    min-height: 3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 1rem;
-    color: var(--color-text-on-dark);
-    font-size: 1.2rem;
-    font-weight: 700;
-}
-
-#container .content-page .pagination .command:hover{
-    background: var(--color-seconday);
 }
 
 @media screen and (min-width: 550px) and (max-width: 799px){

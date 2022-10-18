@@ -38,9 +38,10 @@
     align-items: center;
     border-radius: .5rem;   
     padding: 1rem; 
-    font-size: 1rem;
+    font-size: .75rem;
     text-transform: uppercase;
     background: var(--color-primary-dark);
+    color: var(--color-text-on-dark);
     transition: background-color .3s;    
 }
 

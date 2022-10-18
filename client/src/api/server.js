@@ -86,34 +86,21 @@ export const patch = async (controller, form, objectId) => {
 }
 
 export const erase = async (controlerUrl, idObject, attributes={}) => {
-    const headers = {
-        'Content-Type': 'application/json',
-        // 'X-Custom-Header': 'ProcessThisImmediately',
-        'Authorization': 'Bearer ' + getToken()
-    };
 
-    const controlerInit = `${controlerUrl}&${idObject.name}=${idObject.value}`;
-    const complement = [];
-    Object.keys(attributes).forEach(key=>complement.push(`${key}=${attributes[key]}`));
-
-    const controller = controlerInit + (complement.length > 0 
-        ? '&' + complement.join('&') 
-        : "");
-
-    const request = new Request(
-        config.apiRoot + controller,
-        {
-            method: 'DELETE',
-            headers
+    const controlerInit = `${config.apiRoot}${controlerUrl}&${idObject.name}=${idObject.value}`;
+    
+    const response = await fetch(controlerInit, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${getToken()}` 
         }
-    );
-
-    const response = await fetch(request)
+    })
         .then(r1 => {
             return r1.json()
         })
-        .then(r2 => r2);  
-    
+        .then(r2 => r2)
+        .catch(error => console.log(error));
+        
     return response;
 }
 

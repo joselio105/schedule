@@ -1,0 +1,35 @@
+#container .content-page .pagination{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-primary-dark);
+}
+
+#container .content-page .pagination .command{
+    min-height: 3rem;
+    padding: 0 1.5rem;
+    border-radius: 1rem;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-primary-dark);
+    text-transform: uppercase;
+    transition: background .5s;    
+}
+
+#container .content-page .pagination span{
+    min-height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 1rem;
+    color: var(--color-text-on-dark);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+#container .content-page .pagination .command:hover{
+    background: var(--color-seconday);
+}

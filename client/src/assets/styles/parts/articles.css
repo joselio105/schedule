@@ -1,0 +1,32 @@
+#container .content-page .articles-wrapper .article{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background: var(--color-primary-light);
+    gap: 1rem;
+}
+
+#container .content-page .articles-wrapper .article button{
+    border-radius: .5rem;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-primary-dark);
+    color: var(--color-text-on-dark);
+    font-size: .75rem;
+    padding: 1rem;
+    margin: .25rem 0;
+    text-transform: uppercase;
+    transition: background-color .5s;
+}
+
+#container .content-page .articles-wrapper .article button:hover{
+    background: var(--color-secondary-dark);
+}
+
+#container .content-page .articles-wrapper .article strong{
+    margin-left: 1rem;
+    color: var(--color-text-on-primay);
+}

@@ -1,6 +1,7 @@
 import createElement from "../render/HtmlElement.js";
 import createButtonsWrapper from "./UserButtonsWrapper.js";
 import createCardFooter from "../components/ElementFooter.js";
+import { pageName, viewName} from "../filters/users.js";
 
 export default user => {
     const card = createElement('section', {
@@ -23,7 +24,7 @@ const getCardHeader = (card, user) => {
         text: user.nome
     });
 
-    const nav = createButtonsWrapper('users', user);
+    const nav = createButtonsWrapper(viewName, pageName, user);
 
     header.appendChild(title);
     header.appendChild(nav);

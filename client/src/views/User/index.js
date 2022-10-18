@@ -3,6 +3,7 @@ import { get } from "../../api/server.js";
 import createCard from "../../components/userCard.js";
 import createCommands from "../../components/pageCommands.js";
 import createPagination from "../../components/Pagination.js";
+import filters, { fromName, pageName } from "../../filters/users";
 
 export default async attributes => {
     document.title = "ARQ/UFSC | Servidores";
@@ -26,6 +27,10 @@ export default async attributes => {
     if(attributes.hasOwnProperty('site') && attributes.site !='null'){
         params.site = attributes.site;
     }
+    attributes.filters = filters;
+    attributes.pageName = pageName;
+    attributes.formName =  fromName;
+    
     const users = await get(`users`, params);
     
     const { totalPages, nextPage, previousPage } = users;
