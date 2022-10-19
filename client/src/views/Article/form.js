@@ -5,6 +5,7 @@ import FormBlockInput from "../../components/FormBlockInput.js";
 import { renderRoute } from "../../routes/management.js";
 
 export default async attributes => {
+    console.log('formulário dos artigos')
     let article = {};
     
     if(attributes.id){

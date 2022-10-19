@@ -8,8 +8,93 @@ export default attributes => {
 
     return [
         createHtml('h2', { text: article.titulo }),
+        createArticle(article),
         setButtons(article)
     ]
+}
+
+const createArticle = article => {
+    const container = createHtml('article', { class: "article" });
+    const body = createArticleBody(article);
+    const footer = createArticleFooter(article);
+
+    container.appendChild(body);
+    container.appendChild(footer);
+
+    return container;
+}
+
+const createArticleBody = article => {
+    const body = createHtml('main', { class: "article-body " });
+
+    //https://arq.ufsc.br/img/artigos/peixe.jpg
+    if(article.capa){
+        const capa = createHtml('img', {
+            src: `https://arq.ufsc.br/img/artigos/${article.capa}`,
+            alt: article.titulo
+        });
+
+        body.appendChild(capa);
+    }
+    
+    const parser = new DOMParser();
+    const contents = parser.parseFromString(article.conteudo, 'text/html').body.children;
+    
+    Object.keys(contents).forEach(key => {
+        const content = contents[key];
+        if(content){
+            body.appendChild(content);
+        }
+    })
+
+    return body;
+}
+
+const createArticleFooter = article => {
+    const footer = createHtml('footer', { class: "article-footer" });
+    const wrapper = createHtml('div', { class: "article-info"});
+    const infoDatas = [
+        createHtml('div', { 
+            class: "info", 
+            text: article.classe
+        }),
+        createHtml('div', { 
+            classes: article.local === "1" ? ["info", "local"] : ["info", "geral"], 
+            text: article.local === "1" ? 'Local' : 'Geral'
+        }),
+        article.expires_at ? createHtml('time', { 
+            class: "info", 
+            text: new Date(article.expires_at).toLocaleDateString()
+        }) : null,
+    ];
+
+    infoDatas.forEach(infoData => infoData ? wrapper.appendChild(infoData) : null);
+    footer.appendChild(wrapper);
+    
+    footer.appendChild(createInfoLabeled(
+        'Publicado por: ', 
+        article.autor
+    ));
+    footer.appendChild(createInfoLabeled(
+        'Publicado em: ', 
+        new Date(article.updated_at).toLocaleDateString()
+    ));
+
+    return footer;
+}
+
+const createInfoLabeled = (field, value) => {
+    const wrapper = createHtml('div', {class: 'wrapper'});
+    const label = createHtml('small', {
+        text: field
+    });createHtml
+    const data = createHtml('strong', {
+        text: value
+    });
+    wrapper.appendChild(label);
+    wrapper.appendChild(data);
+
+    return wrapper;
 }
 
 const setButtons = article => {
@@ -19,7 +104,7 @@ const setButtons = article => {
         createHtml('button', {
             id: "button-back",
             classes: ["button"],
-            value: pageName,
+            value: viewName,
             text: "Voltar"
         }),
         createHtml('button', {
@@ -54,6 +139,7 @@ const setActions = buttons => {
 }
 
 const backHandler = event => {
+    console.log(event.currentTarget.value)
     renderRoute(event.currentTarget.value);
 }
 
