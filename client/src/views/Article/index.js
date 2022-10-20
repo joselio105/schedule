@@ -43,6 +43,26 @@ export default async attributes => {
         order: "updated_at",
         orderDirection: "DESC"
     }
+    if(attributes.hasOwnProperty('local') && attributes.local !='null'){
+        params.local = attributes.local;
+    }
+    if(attributes.hasOwnProperty('class') && attributes.class !='null'){
+        params.class = attributes.class;
+    }
+    if(attributes.hasOwnProperty('expired') && attributes.expired !='null'){
+        params.expired = attributes.expired;
+    }
+    
+    if(params.hasOwnProperty('local') && params.local === 'null'){
+        delete params.local;
+    }
+    if(params.hasOwnProperty('class') && params.class === 'null'){
+        delete params.class;
+    }
+    if(params.hasOwnProperty('expired') && params.expired === 'null'){
+        delete params.expired;
+    }
+    
     attributes.filters = filters;
     attributes.pageName = pageName;
     attributes.formName =  fromName;

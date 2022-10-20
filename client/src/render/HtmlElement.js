@@ -43,7 +43,8 @@ export const setSelectBlock = (container, attributes) => {
     });
 
     const optionTags = options.map( option => {
-        if(value === option.value){
+        
+        if(value === String(option.value)){
             option.selected = 'select';
         }
 

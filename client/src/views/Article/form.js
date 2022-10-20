@@ -3,9 +3,10 @@ import createFom from "../../components/Form.js";
 import setFeedback, { setFeedbackMessage } from "../../components/Feedback.js";
 import FormBlockInput from "../../components/FormBlockInput.js";
 import { renderRoute } from "../../routes/management.js";
+import { get } from "../../api/server.js";
+import { viewName, viewPage } from "../../filters/articles.js";
 
 export default async attributes => {
-    console.log('formulário dos artigos')
     let article = {};
     
     if(attributes.id){
@@ -23,6 +24,8 @@ const createForm = article => {
     const fields = getFields(article);
     const buttons = getButtons(article);
     const form = createFom(fields, buttons);
+
+    form.addEventListener('submit', handleSubmit);
 
     return form;
 }
@@ -43,7 +46,8 @@ const getButtons = article => {
         createElement('button', {
             class: 'back',
             text: 'voltar',
-            id: 'articles'
+            id: 'articles',
+            value: article.id
         }),
         createElement('button', { 
             type: 'submit', 
@@ -54,7 +58,6 @@ const getButtons = article => {
     ];
 
     buttons[0].addEventListener('click', handleBack);
-    buttons[1].addEventListener('click', handleSubmit);
 
     return buttons;
 }
@@ -99,8 +102,15 @@ const handleSubmit = event => {
 }
 
 const handleBack = event => {
-    const backTo = event.currentTarget.id;
-    renderRoute(backTo);
+    event.preventDefault();
+    // const backTo = event.currentTarget.id;
+    const id = event.currentTarget.value;
+    console.log(id)
+    if(id){
+        renderRoute(viewPage, { id })
+    }
+
+    renderRoute(viewName);
 }
 
 const getTextAreaBlock = () => {

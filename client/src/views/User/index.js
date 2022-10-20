@@ -27,6 +27,20 @@ export default async attributes => {
     if(attributes.hasOwnProperty('site') && attributes.site !='null'){
         params.site = attributes.site;
     }
+    if(params.hasOwnProperty('tipo') && params.tipo === 'null'){
+        delete params.tipo;
+    }
+
+    if(params.hasOwnProperty('saida') && params.saida === 'null'){
+        delete params.saida;
+    }
+    if(params.hasOwnProperty('lattes') && params.lattes === 'null'){
+        delete params.lattes;
+    }
+    if(params.hasOwnProperty('site') && params.site === 'null'){
+        delete params.site;
+    }
+    
     attributes.filters = filters;
     attributes.pageName = pageName;
     attributes.formName =  fromName;

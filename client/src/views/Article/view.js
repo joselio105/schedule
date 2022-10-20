@@ -1,5 +1,5 @@
 import createHtml from "../../render/HtmlElement.js";
-import filters, { viewName, pageName, fromName} from "../../filters/articles.js";
+import { viewName, fromName} from "../../filters/articles.js";
 import { renderRoute } from "../../routes/management.js";
 
 export default attributes => {
